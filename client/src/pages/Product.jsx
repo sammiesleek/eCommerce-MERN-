@@ -20,7 +20,32 @@ const Product = () => {
             <p>product</p>
           </span>
         </div>
-        <div className="flex"></div>
+        <div className="flex mt-10">
+          <div className="flex w-[80%] bg-gray-100 ">
+            <div className="flex w-1/2 flex-col">
+              <div className="flex">
+                <img src="/images/bg20.jpg" alt="" />
+              </div>
+              <div className="flex w-full justify-between mt-3">
+                <div className="flex w-[23%] justify-center items-center ">
+                  <img src="/images/bg3.jpg" alt="" />
+                </div>
+                <div className="flex w-[23%] justify-center items-center ">
+                  <img src="/images/bg3.jpg" alt="" />
+                </div>
+                <div className="flex w-[23%] justify-center items-center ">
+                  <img src="/images/bg3.jpg" alt="" />
+                </div>
+                <div className="flex w-[23%] justify-center items-center ">
+                  <img src="/images/bg9.jpg" alt="" />
+                </div>
+              </div>
+            </div>
+            <div className="flex"></div>
+          </div>
+
+          <div className="flex"></div>
+        </div>
       </div>
     </div>
   );
