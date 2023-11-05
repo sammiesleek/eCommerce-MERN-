@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 }
 import { useContext } from "react";
 import { AppStateContext } from "../ContextApi/AppStateContext";
+import CartModal from "./CartModal";
 
 const Header = () => {
   const { cartModal, setCartModal } = useContext(AppStateContext);
@@ -131,6 +132,7 @@ const Header = () => {
           </span>
         </div>
       </div>
+      <CartModal />
     </div>
   );
 };

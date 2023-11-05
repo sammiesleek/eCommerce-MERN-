@@ -2,7 +2,6 @@ import Explore from "../components/Explore";
 import Herosection from "../components/Herosection";
 import ProductSection from "../components/ProductSection";
 import SubHero from "../components/SubHero";
-import CartModal from "../components/CartModal";
 const HomePage = () => {
   return (
     <div className=" ">
@@ -11,7 +10,6 @@ const HomePage = () => {
       <ProductSection title={"New Arrivals"} />
       <Explore />
       <ProductSection title={"Best Selling"} />
-      <CartModal />
     </div>
   );
 };
