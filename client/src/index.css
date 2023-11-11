@@ -77,12 +77,29 @@ a{
 } 
 
 :root {
-  --animate-delay: 1s;
+  /* --animate-delay: 1s; */
 }
 
 
 
 
-.product_page{
+.product_page, .proces_order{
   background-image: url("/images/probg.jpg");
+}
+.product_card{
+  overflow-x: hidden;
+}
+.product_card  .product_action{
+  left: -40px;
+  transition: all ease-in-out .4s;
+}
+.product_card:hover .product_action{
+  left: 10px;
+
+}
+.cart_bg{
+  background-image: url("/images/cartbg.jpg");
+  background-position: right;
+  background-size: cover;
+  background-repeat: no-repeat;
 }

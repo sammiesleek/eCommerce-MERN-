@@ -1,26 +1,27 @@
 import Header from "./components/Header";
-import {
-  BrowserRouter as RouteContainer,
-  Routes,
-  // Link,
-  Route,
-} from "react-router-dom";
+
+import { Outlet } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Footer from "./components/Footer";
 import Products from "./pages/Products";
 import Product from "./pages/Product";
+import ShoppingCart from "./pages/ShoppingCart";
+import OrderSummary from "./pages/OrderSummary";
+import TrackOrder from "./pages/TrackOrder";
 
 function App() {
   return (
-    <RouteContainer>
+    <>
       <Header />
-      <Routes>
-        <Route path="/" exact element={<HomePage />} />
-        <Route path="/products" exact element={<Products />} />
-        <Route path="/product/:id" exact element={<Product />} />
-      </Routes>
+
+      <Outlet></Outlet>
+      {/* 
+      <Route path="/" exact element={<HomePage />} />
+      <Route path="/products" exact element={<Products />} />
+      */}
+
       <Footer />
-    </RouteContainer>
+    </>
   );
 }
 

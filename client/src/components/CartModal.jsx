@@ -1,6 +1,7 @@
 import { Close, Delete } from "@icon-park/react";
 import { useContext } from "react";
 import { AppStateContext } from "../ContextApi/AppStateContext";
+import { Link } from "react-router-dom";
 
 const CartModal = () => {
   const { cartModal, setCartModal } = useContext(AppStateContext);
@@ -217,9 +218,17 @@ const CartModal = () => {
         <div className="flex absolute bottom-0 w-full left-0 right-0">
           <span
             style={{ letterSpacing: "3px" }}
-            className="w-1/2 py-4 font-semibold  text-sm flex justify-center text-center items-center cursor-pointer bg-[#2a2a2a] text-white hover:bg-[#CEA384] ease-linear transition-all"
+            className="w-1/2 font-semibold  text-sm flex justify-center text-center items-center cursor-pointer bg-[#2a2a2a] text-white hover:bg-[#CEA384] ease-linear transition-all"
           >
-            VIEW CART
+            <Link
+              onClick={() => {
+                setCartModal(false);
+              }}
+              to="/cart"
+              className=" py-4 w-full"
+            >
+              VIEW CART
+            </Link>
           </span>
           <span
             style={{ letterSpacing: "3px" }}

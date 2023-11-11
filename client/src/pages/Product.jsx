@@ -1,7 +1,18 @@
 import { Like, Minus, Plus, Right, Star, User } from "@icon-park/react";
 import { Link } from "react-router-dom";
 import ProductSection from "../components/ProductSection";
+import products from "../data/products";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 const Product = () => {
+  const { id: productId } = useParams();
+
+  const product = products.find((p) => p._id === productId);
+  // const product = products.filter((product) => product._id == id);
+  // useEffect(()=>{
+
+  // })
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col product_page min-h-screen w-full relative  pt-20 ">
@@ -26,7 +37,7 @@ const Product = () => {
             <div className="flex lg:w-full xl:w-[75%] flex-col mdlg:flex-row ">
               <div className="flex w-full mdlg:w-1/2 flex-col">
                 <div className="flex">
-                  <img src="/images/bg20.jpg" alt="" />
+                  <img src={product.image} alt="" />
                 </div>
                 <div className="flex w-full justify-between mt-3 gap-x-5">
                   <div className="flex w-[23%] justify-center items-center ">
@@ -58,7 +69,7 @@ const Product = () => {
                       />
                     </span>
                     <p className="text-[#CEA384] text-2xl mt-2 font-semibold mb-0">
-                      $ 55.00
+                      {product.price}
                     </p>
                     <span className="flex  pb-4 mt-2 items-center">
                       <span className="flex items-center gap-x-2">
@@ -94,7 +105,9 @@ const Product = () => {
                           strokeWidth={3}
                         />
                       </span>
-                      <p className="mb-0 ml-6 text-[#4a4a4a]">3 reviews</p>
+                      <p className="mb-0 ml-6 text-[#4a4a4a]">
+                        {product.numReviews} reviews
+                      </p>
                     </span>
                   </div>
                   <div className="flex mt-5 flex-col">
@@ -228,8 +241,8 @@ const Product = () => {
         <div className="flex flex-col  w-full">
           <h1 className="font-bold text-xl">Ratings + Reviews</h1>
           <div className="flex flex-col ">
-            <div className="flex flex-col max-w-[700px] gap-y-10">
-              <div className="flex  flex-col gap-y-3 ">
+            <div className="flex flex-col  lg:flex-row gap-y-10">
+              <div className="flex  flex-col gap-y-3 w-full lg:w-1/2">
                 <span className="flex items-center gap-x-2 mt-2">
                   <Star
                     className=" text-[#CEA384] "
@@ -294,7 +307,7 @@ const Product = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex  flex-col ">
+              <div className="flex  flex-col w-full lg:w-1/2 ">
                 <p>Submit Review </p>
                 <div className="flex flex-col">
                   <div className="flex border w-full">

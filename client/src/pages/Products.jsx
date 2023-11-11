@@ -15,7 +15,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "animate.css";
-import ProductSection from "../components/ProductSection";
+import products from "../data/products";
+import ProductCard from "../components/ProductCard";
 
 const Products = () => {
   return (
@@ -106,7 +107,16 @@ const Products = () => {
           </SwiperSlide>
         </Swiper>
       </div>
-      <ProductSection title={""} />
+      <div className="flex flex-wrap">
+        {products.map((product) => (
+          <div
+            key={product._id}
+            className="flex w-full md:w-[50%} lg:w-[33%] xl:w-[25%] p-2"
+          >
+            <ProductCard product={product} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

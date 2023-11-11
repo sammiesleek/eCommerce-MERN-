@@ -15,9 +15,11 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AppStateContext } from "../ContextApi/AppStateContext";
 import CartModal from "./CartModal";
+import LoginModal from "./LoginModal";
 
 const Header = () => {
-  const { cartModal, setCartModal } = useContext(AppStateContext);
+  const { cartModal, setCartModal, loginModal, setLoginModal } =
+    useContext(AppStateContext);
   const [navState, setNavState] = useState(false);
   return (
     <div className="flex w-full border-b justify-center items-center fixed bg-transparent py-3 px-5 bg-white z-50 top-0">
@@ -32,10 +34,12 @@ const Header = () => {
           {/* <MenuUnfoldOne theme="outline" size="24" fill="#333" /> */}
         </div>
         <div className="hidden md:flex justify-self-center  mr-20">
-          <h1 className="font-bold text-xl">Apparels</h1>
+          <Link to="/" className="font-bold text-xl">
+            Apparels
+          </Link>
         </div>
         <div
-          className={` transition-[all ease-in-out 1s] flex flex-col absolute h-screen bg-[rgba(128,128,128,0.7)] w-screen ${
+          className={` transition-all  ease-in-out flex flex-col absolute h-screen bg-[rgba(128,128,128,0.7)] w-screen ${
             navState ? "left-0" : "left-[-20000px]"
           }  top-0 md:w-fit md:bg-transparent md:flex-row md:h-fit  md:static `}
         >
@@ -69,12 +73,18 @@ const Header = () => {
                   theme="outline"
                   size="24"
                   fill="#333"
+                  onClick={() => {
+                    setLoginModal(true);
+                  }}
                 />
                 <p className="mb-0 ml-3 text-black">LOGIN</p>
               </span>
             </div>
             <div className="flex flex-col md:flex-row  mt-5 md:mt-0 pl-3 gap-x-5">
-              <Link className="font-normal py-8 md:py-0  border-b md:border-b-0 text-2xl md:text-lg">
+              <Link
+                to="/"
+                className="font-normal py-8 md:py-0  border-b md:border-b-0 text-2xl md:text-lg"
+              >
                 {" "}
                 Home
               </Link>
@@ -109,6 +119,9 @@ const Header = () => {
               theme="outline"
               size="24"
               fill="#333"
+              onClick={() => {
+                setLoginModal(true);
+              }}
             />
           </span>
           <span>
@@ -133,6 +146,7 @@ const Header = () => {
         </div>
       </div>
       <CartModal />
+      <LoginModal />
     </div>
   );
 };
