@@ -22,7 +22,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomePage />} />
       <Route path="/products" exact element={<Products />} />
-      <Route path="/product/:id" exact element={<Product />} />
+      <Route path="/products/:id" exact element={<Product />} />
       <Route path="/cart" exact element={<ShoppingCart />} />
       <Route path="/shipping" exact element={<OrderSummary />} />
       <Route path="/tracking" exact element={<TrackOrder />} />

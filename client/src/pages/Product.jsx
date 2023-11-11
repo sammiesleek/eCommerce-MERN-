@@ -1,17 +1,34 @@
 import { Like, Minus, Plus, Right, Star, User } from "@icon-park/react";
 import { Link } from "react-router-dom";
 import ProductSection from "../components/ProductSection";
-import products from "../data/products";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 const Product = () => {
   const { id: productId } = useParams();
-
-  const product = products.find((p) => p._id === productId);
-  // const product = products.filter((product) => product._id == id);
-  // useEffect(()=>{
-
-  // })
+  const [product, setProduct] = useState({});
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const headers = {
+          "Content-Type": "application/json",
+          //  "Api-Key": apiKey,
+          // Add any other headers as needed
+        };
+        const { data } = await axios.get(
+          `http://localhost:5000/api/products/${productId}`,
+          {
+            headers: headers,
+          }
+        );
+        setProduct(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProduct();
+  }, [productId]);
 
   return (
     <div className="flex flex-col">

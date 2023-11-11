@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 const ProductCard = ({ product }) => {
   return (
-    <Link to={`/product/${product._id}`}>
+    <Link to={`/products/${product._id}`}>
       <div className="flex flex-col justify-center items-center product_card">
         <div className="flex relative">
           <img src={product.image} alt="" />
