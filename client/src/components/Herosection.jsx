@@ -1,4 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Link } from "react-router-dom";
 
 import {
   Navigation,
@@ -47,9 +48,12 @@ const Herosection = () => {
                   to strip away complexity from your everyday
                 </p>
 
-                <button className="px-6 font-medium py-3 border border-black mt-20 hover:border-transparent hover:bg-white ease-in-out">
+                <Link
+                  to="/products"
+                  className="px-6 font-medium py-3 border border-black mt-20 hover:border-transparent hover:bg-white ease-in-out"
+                >
                   SHOP NOW
-                </button>
+                </Link>
               </div>
             </div>
             <div className="flex  w-full h-fit lg:w-1/2 justify-center slide_image  animate__animated  animate__slideInRight">
@@ -75,9 +79,12 @@ const Herosection = () => {
                   to strip away complexity from your everyday
                 </p>
 
-                <button className="px-6 font-medium py-3 border border-black mt-20 hover:border-transparent hover:bg-white ease-in-out">
+                <Link
+                  to="/products"
+                  className="px-6 font-medium py-3 border border-black mt-20 hover:border-transparent hover:bg-white ease-in-out"
+                >
                   SHOP NOW
-                </button>
+                </Link>
               </div>
             </div>
             <div className="flex  w-full h-fit lg:w-1/2 justify-center slide_image  animate__animated  animate__slideInRight">
@@ -103,9 +110,12 @@ const Herosection = () => {
                   to strip away complexity from your everyday
                 </p>
 
-                <button className="px-6 font-medium py-3 border border-black mt-20 hover:border-transparent hover:bg-white ease-in-out">
+                <Link
+                  to="/products"
+                  className="px-6 font-medium py-3 border border-black mt-20 hover:border-transparent hover:bg-white ease-in-out"
+                >
                   SHOP NOW
-                </button>
+                </Link>
               </div>
             </div>
             <div className="flex  w-full h-fit lg:w-1/2 justify-center slide_image  animate__animated  animate__slideInRight">

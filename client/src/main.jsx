@@ -16,6 +16,8 @@ import { ShoppingCart } from "@icon-park/react";
 import OrderSummary from "./pages/OrderSummary.jsx";
 import TrackOrder from "./pages/TrackOrder.jsx";
 import Products from "./pages/Products.jsx";
+import store from "../store.js";
+import { Provider } from "react-redux";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,8 +34,10 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ContextProvider>
-      <RouterProvider router={router} />
-    </ContextProvider>
+    <Provider store={store}>
+      <ContextProvider>
+        <RouterProvider router={router} />
+      </ContextProvider>
+    </Provider>
   </React.StrictMode>
 );

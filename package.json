@@ -8,13 +8,18 @@
     "start": "node server/server.js",
     "server": "nodemon server/server",
     "client": " npm run dev --prefix client",
-    "dev": "concurrently \" npm run server\"  \"npm run client  "
+    "dev": "concurrently \" npm run server\"  \"npm run client  ",
+    "data:import": " node server/seeder.js",
+    "data:destroy": " node server/seeder.js -d"
   },
   "author": "Sammy Ajayi",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
     "mongoose": "^8.0.0"
   },
   "devDependencies": {

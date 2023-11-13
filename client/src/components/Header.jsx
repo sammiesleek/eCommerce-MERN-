@@ -9,6 +9,7 @@ import {
 } from "@icon-park/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Loader from "./Loader";
 {
   /* <MallBag theme="outline" size="24" fill="#333" />; */
 }
@@ -16,10 +17,21 @@ import { useContext } from "react";
 import { AppStateContext } from "../ContextApi/AppStateContext";
 import CartModal from "./CartModal";
 import LoginModal from "./LoginModal";
+import Alert from "./Alert";
 
 const Header = () => {
-  const { cartModal, setCartModal, loginModal, setLoginModal } =
-    useContext(AppStateContext);
+  const {
+    cartModal,
+    setCartModal,
+    loginModal,
+    setLoginModal,
+    message,
+    setMessage,
+    severity,
+    setSeverity,
+    active,
+    setActive,
+  } = useContext(AppStateContext);
   const [navState, setNavState] = useState(false);
   return (
     <div className="flex w-full border-b justify-center items-center fixed bg-transparent py-3 px-5 bg-white z-50 top-0">
@@ -147,6 +159,12 @@ const Header = () => {
       </div>
       <CartModal />
       <LoginModal />
+      <Alert
+        message={message}
+        severity={severity}
+        active={active}
+        onClose={() => setActive(false)}
+      />
     </div>
   );
 };
