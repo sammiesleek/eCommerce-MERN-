@@ -10,7 +10,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
-import ProductSection from "./components/ProductSection.jsx";
 import Product from "./pages/Product.jsx";
 import { ShoppingCart } from "@icon-park/react";
 import OrderSummary from "./pages/OrderSummary.jsx";
@@ -18,16 +17,23 @@ import TrackOrder from "./pages/TrackOrder.jsx";
 import Products from "./pages/Products.jsx";
 import store from "../store.js";
 import { Provider } from "react-redux";
+import Dashboard from "./admin/pages/Dashboard.jsx";
+import Admin from "./admin/Admin.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route index={true} path="/" element={<HomePage />} />
-      <Route path="/products" exact element={<Products />} />
-      <Route path="/products/:id" exact element={<Product />} />
-      <Route path="/cart" exact element={<ShoppingCart />} />
-      <Route path="/shipping" exact element={<OrderSummary />} />
-      <Route path="/tracking" exact element={<TrackOrder />} />
+    <Route>
+      <Route path="/" element={<App />}>
+        <Route index={true} path="/" element={<HomePage />} />
+        <Route path="/products" exact element={<Products />} />
+        <Route path="/products/:id" exact element={<Product />} />
+        <Route path="/cart" exact element={<ShoppingCart />} />
+        <Route path="/shipping" exact element={<OrderSummary />} />
+        <Route path="/tracking" exact element={<TrackOrder />} />
+      </Route>
+      <Route path="/admin" element={<Admin />}>
+        <Route index={true} path="/" element={<Dashboard />}></Route>
+      </Route>
     </Route>
   )
 );
