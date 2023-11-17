@@ -19,7 +19,10 @@ const SideBar = () => {
       setAdminSideBar(false);
     }
   }, []);
-
+  const normLink =
+    "flex pl-4 no-underline gap-x-3  py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear ";
+  const activeLink =
+    "flex pl-4 no-underline gap-x-3  py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear nav_active ";
   const { adminSideBar, setAdminSideBar } = useContext(AppStateContext);
   const [path, setPath] = useState("");
   useEffect(() => {
@@ -67,9 +70,7 @@ const SideBar = () => {
         <div className="flex flex-col w-full  gap-y-5 pt-4">
           <NavLink
             to="/admin"
-            className={`flex pl-4 no-underline gap-x-3 py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear ${
-              path === "/admin" ? "nav_active" : ""
-            }`}
+            className={({ isActive }) => (isActive ? activeLink : normLink)}
           >
             <ApplicationMenu
               theme="outline"
@@ -84,17 +85,17 @@ const SideBar = () => {
               <li key={index} className="flex flex-col ">
                 <NavLink
                   to=""
-                  className={`flex  no-underline gap-x-3 pl-4  text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear ${
+                  className={`flex  no-underline gap-x-3 pl-4  py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear ${
                     item.to.includes(path) ? "nav_active" : ""
                   }`}
                 >
                   {item.icon}
                   <span>{item.label}</span>
                 </NavLink>
-                <ul className="  mt-3 gap-y-3 flex flex-col ">
+                <ul className=" pl-10 mt-3 gap-y-3 flex flex-col ">
                   {item.content &&
                     item.content.map((item, index) => (
-                      <li key={index}>
+                      <li className="" key={index}>
                         <NavLink
                           className="no-underline  text-[#555962] font-normal hover:text-[#10B981] transition-all ease-linear"
                           to={item.to}
@@ -120,8 +121,8 @@ const SideBar = () => {
             <span>Customers</span>
           </NavLink>
           <NavLink
-            to="/admin"
-            className="flex pl-4 no-underline gap-x-3  py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear"
+            to="/admin/orders"
+            className={({ isActive }) => (isActive ? activeLink : normLink)}
           >
             <ListCheckbox
               theme="outline"

@@ -1,13 +1,28 @@
-import { Like, Minus, Plus, Right, Star, User } from "@icon-park/react";
+import { Like, Right, Star, User } from "@icon-park/react";
 import { Link, useNavigate } from "react-router-dom";
 import ProductSection from "../components/ProductSection";
 import { useParams } from "react-router-dom";
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
 import Loader from "../components/Loader";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../slices/cartSlice";
+import ProductQty from "../components/ProductQty";
+import { AppStateContext } from "../ContextApi/AppStateContext";
+
 const Product = () => {
+  const {
+    qty,
+    // setQty,
+    // message,
+    // setMessage,
+    // severity,
+    // setSeverity,
+    // active,
+    // setActive,
+    // isError,
+    // setIsError,
+  } = useContext(AppStateContext);
   const { id: productId } = useParams();
   const {
     data: product,
@@ -15,39 +30,9 @@ const Product = () => {
     error,
   } = useGetProductDetailsQuery(productId);
   const distpatch = useDispatch();
-  const navigate = useNavigate();
 
-  const [qty, setQty] = useState(1);
   const addToCartHandler = () => {
     distpatch(addToCart({ ...product, qty }));
-    navigate("/cart");
-  };
-
-  const incCart = () => {
-    if (qty < product.countInStock) {
-      setQty(qty + 1);
-    } else {
-      return;
-    }
-  };
-  const decCart = () => {
-    if (qty > 1) {
-      setQty(qty - 1);
-    } else {
-      return;
-    }
-  };
-
-  const changeInput = (e) => {
-    if (e.currentTarget.value === "") {
-      setQty(0);
-    } else {
-      const input = e.currentTarget.value.replace(/\D/g, "");
-
-      const limitedValue = Math.min(parseInt(input, 10), product.countInStock);
-      console.log(limitedValue);
-      setQty(parseInt(limitedValue));
-    }
   };
 
   return (
@@ -198,42 +183,7 @@ const Product = () => {
                             : "Out of Stock"}
                         </p>
                         <div className="flex gap-x-4 ">
-                          <div className="flex border-2 border-black w-[105px] h-[54px] ">
-                            <span className="flex justify-center items-center w-1/2 border-r border-r-black text-lg font-extrabold">
-                              <input
-                                className="pl-4 bg-transparent  w-full h-full flex justify-center items-center border-none focus:outline-none "
-                                type="text"
-                                value={qty}
-                                onChange={(e) => changeInput(e)}
-                              />
-                            </span>
-                            <span className="flex flex-col w-1/2">
-                              <span
-                                style={{ userSelect: "none" }}
-                                onClick={() => incCart()}
-                                className="h-1/2 w-full  flex justify-center items-center border-b  border-b-black cursor-pointer"
-                              >
-                                <Plus
-                                  className=" hover:text-[#CEA384] "
-                                  theme="filled"
-                                  size="22"
-                                  strokeWidth={5}
-                                />
-                              </span>
-                              <span
-                                style={{ userSelect: "none" }}
-                                onClick={() => decCart()}
-                                className="h-1/2 w-full flex justify-center items-center cursor-pointer"
-                              >
-                                <Minus
-                                  className=" hover:text-[#CEA384] "
-                                  theme="filled"
-                                  size="22"
-                                  strokeWidth={5}
-                                />
-                              </span>
-                            </span>
-                          </div>
+                          <ProductQty product={product} />
                           <button
                             onClick={() => addToCartHandler()}
                             style={{ letterSpacing: "2px" }}

@@ -52,7 +52,7 @@ const Header = () => {
                   transform: "translate3d(0px, 84px, 0px) ",
                 }}
                 align="right"
-                className="mt-2 flex  w-[300px] border-none shadow-sm"
+                className="mt-2   w-[300px] border-none shadow-sm"
               >
                 <ul className="flex w-full flex-col p-0 ">
                   <li className="flex items-center w-full gap-x-2 px-2 py-2">
@@ -67,7 +67,7 @@ const Header = () => {
                       className=" flex justify-center items-center
                     flex-col"
                     >
-                      <span className="ml-1 flex justify-center font-semibold text-left text-gray-700">
+                      <span className="ml-1 flex justify-center text-sm font-semibold text-left text-gray-700">
                         Stock out , please kindly restock.
                       </span>
                       <span className="flex items-center w-full ">

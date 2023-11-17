@@ -2,8 +2,9 @@ import { Close, Delete } from "@icon-park/react";
 import { useContext } from "react";
 import { AppStateContext } from "../ContextApi/AppStateContext";
 import { Link } from "react-router-dom";
+import { NairaFormatter } from "../utils/cartUtils";
 
-const CartModal = () => {
+const CartModal = ({ cartItems }) => {
   const { cartModal, setCartModal } = useContext(AppStateContext);
 
   return (
@@ -29,191 +30,37 @@ const CartModal = () => {
             <p className="mb-0 font-bold text-xl">Shopping Cart</p>
           </span>
           <span className="font-bold text-lg p-2 border h-[50px] w-[50px] flex justify-center items-center">
-            10
+            {cartItems.reduce((a, c) => a + c.qty, 0)}
           </span>
         </div>
         {/* cart list starts here  */}
         <div className="flex flex-col overflow-x-auto pb-20">
-          <div className=" border-b flex h-fit py-4">
-            <div className="flex w-[80px] h-fit">
-              <img src="/images/bg3.jpg" alt="" />
+          {cartItems.map((cart, index) => (
+            <div key={index} className=" border-b flex h-fit py-4">
+              <div className="flex w-[80px] h-fit">
+                <img src={cart.image} alt="" />
+              </div>
+              <div className="flex flex-col">
+                <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
+                  {cart.name}
+                </p>
+                <span className="text-md font-semibold text-[#333]">
+                  QTY : {cart.qty}
+                </span>
+                <span className="text-md font-semibold text-[#333]">
+                  {NairaFormatter.format(cart.price)}
+                </span>
+              </div>
+              <div className="flex">
+                <Delete
+                  className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
+                  theme="outline"
+                  size="22"
+                  strokeWidth={4}
+                />
+              </div>
             </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
-                Lenny Vegan Tote Bag - M / SaddleBrown
-              </p>
-              <span className="text-md font-semibold text-[#333]">QTY : 2</span>
-              <span className="text-md font-semibold text-[#333]">$45.00</span>
-            </div>
-            <div className="flex">
-              <Delete
-                className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
-                theme="outline"
-                size="22"
-                strokeWidth={4}
-              />
-            </div>
-          </div>
-          <div className=" border-b flex h-fit py-4">
-            <div className="flex w-[80px] h-fit">
-              <img src="/images/bg3.jpg" alt="" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
-                Lenny Vegan Tote Bag - M / SaddleBrown
-              </p>
-              <span className="text-md font-semibold text-[#333]">QTY : 2</span>
-              <span className="text-md font-semibold text-[#333]">$45.00</span>
-            </div>
-            <div className="flex">
-              <Delete
-                className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
-                theme="outline"
-                size="22"
-                strokeWidth={4}
-              />
-            </div>
-          </div>
-          <div className=" border-b flex h-fit py-4">
-            <div className="flex w-[80px] h-fit">
-              <img src="/images/bg3.jpg" alt="" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
-                Lenny Vegan Tote Bag - M / SaddleBrown
-              </p>
-              <span className="text-md font-semibold text-[#333]">QTY : 2</span>
-              <span className="text-md font-semibold text-[#333]">$45.00</span>
-            </div>
-            <div className="flex">
-              <Delete
-                className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
-                theme="outline"
-                size="22"
-                strokeWidth={4}
-              />
-            </div>
-          </div>
-          <div className=" border-b flex h-fit py-4">
-            <div className="flex w-[80px] h-fit">
-              <img src="/images/bg3.jpg" alt="" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
-                Lenny Vegan Tote Bag - M / SaddleBrown
-              </p>
-              <span className="text-md font-semibold text-[#333]">QTY : 2</span>
-              <span className="text-md font-semibold text-[#333]">$45.00</span>
-            </div>
-            <div className="flex">
-              <Delete
-                className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
-                theme="outline"
-                size="22"
-                strokeWidth={4}
-              />
-            </div>
-          </div>
-          <div className=" border-b flex h-fit py-4">
-            <div className="flex w-[80px] h-fit">
-              <img src="/images/bg3.jpg" alt="" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
-                Lenny Vegan Tote Bag - M / SaddleBrown
-              </p>
-              <span className="text-md font-semibold text-[#333]">QTY : 2</span>
-              <span className="text-md font-semibold text-[#333]">$45.00</span>
-            </div>
-            <div className="flex">
-              <Delete
-                className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
-                theme="outline"
-                size="22"
-                strokeWidth={4}
-              />
-            </div>
-          </div>
-          <div className=" border-b flex h-fit py-4">
-            <div className="flex w-[80px] h-fit">
-              <img src="/images/bg3.jpg" alt="" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
-                Lenny Vegan Tote Bag - M / SaddleBrown
-              </p>
-              <span className="text-md font-semibold text-[#333]">QTY : 2</span>
-              <span className="text-md font-semibold text-[#333]">$45.00</span>
-            </div>
-            <div className="flex">
-              <Delete
-                className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
-                theme="outline"
-                size="22"
-                strokeWidth={4}
-              />
-            </div>
-          </div>
-          <div className=" border-b flex h-fit py-4">
-            <div className="flex w-[80px] h-fit">
-              <img src="/images/bg3.jpg" alt="" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
-                Lenny Vegan Tote Bag - M / SaddleBrown
-              </p>
-              <span className="text-md font-semibold text-[#333]">QTY : 2</span>
-              <span className="text-md font-semibold text-[#333]">$45.00</span>
-            </div>
-            <div className="flex">
-              <Delete
-                className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
-                theme="outline"
-                size="22"
-                strokeWidth={4}
-              />
-            </div>
-          </div>
-          <div className=" border-b flex h-fit py-4">
-            <div className="flex w-[80px] h-fit">
-              <img src="/images/bg3.jpg" alt="" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
-                Lenny Vegan Tote Bag - M / SaddleBrown
-              </p>
-              <span className="text-md font-semibold text-[#333]">QTY : 2</span>
-              <span className="text-md font-semibold text-[#333]">$45.00</span>
-            </div>
-            <div className="flex">
-              <Delete
-                className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
-                theme="outline"
-                size="22"
-                strokeWidth={4}
-              />
-            </div>
-          </div>
-          <div className=" border-b flex h-fit py-4">
-            <div className="flex w-[80px] h-fit">
-              <img src="/images/bg3.jpg" alt="" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
-                Lenny Vegan Tote Bag - M / SaddleBrown
-              </p>
-              <span className="text-md font-semibold text-[#333]">QTY : 2</span>
-              <span className="text-md font-semibold text-[#333]">$45.00</span>
-            </div>
-            <div className="flex">
-              <Delete
-                className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
-                theme="outline"
-                size="22"
-                strokeWidth={4}
-              />
-            </div>
-          </div>
+          ))}
         </div>
         <div className="flex absolute bottom-0 w-full left-0 right-0">
           <span

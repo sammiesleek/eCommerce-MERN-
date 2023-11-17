@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
+import "bootstrap/scss/bootstrap.scss";
 import "./index.css";
 import { ContextProvider } from "./ContextApi/AppStateContext.jsx";
 import {
@@ -11,7 +12,6 @@ import {
 } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import Product from "./pages/Product.jsx";
-import { ShoppingCart } from "@icon-park/react";
 import OrderSummary from "./pages/OrderSummary.jsx";
 import TrackOrder from "./pages/TrackOrder.jsx";
 import Products from "./pages/Products.jsx";
@@ -20,7 +20,8 @@ import { Provider } from "react-redux";
 import Dashboard from "./admin/pages/Dashboard.jsx";
 import Orders from "./admin/pages/Orders.jsx";
 import AdminRoute from "./admin/components/AdminRoute.jsx";
-import "bootstrap/dist/css/bootstrap.min.css";
+import ShoppingCart from "./pages/ShoppingCart.jsx";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>

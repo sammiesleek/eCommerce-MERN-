@@ -6,6 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Sofia+Sans+Semi+Condensed:wght@1;100;200;300;400;500;600;700;800;900;1000&display=swap');
 
 
+
 ::-webkit-scrollbar {
     width: 0px;
     /* height: 2em */
@@ -24,7 +25,7 @@ body{
   font-family: 'Sofia Sans Semi Condensed', sans-serif;
 }
 a{
-  text-decoration: none
+  text-decoration: none !important;
 }
 @tailwind base;
 @tailwind components;
@@ -135,7 +136,7 @@ content: '';
   z-index: 999; }
 
 .hamburger .line {
-  background: #000;
+  background: #10B981;
   display: block;
   height: 0.1875rem;
   border-radius: 0.1875rem;
@@ -180,4 +181,18 @@ content: '';
     bottom: 0;
     z-index: -1;
     border-radius:0px  10px 10px 0px;
+  }
+
+
+  .cart_count{
+    border-radius: 50%;
+    display: flex;
+    height: 18px;
+    width: 18px;
+    top: -6px;
+    left: 12px;
+    justify-content: center;
+    align-items: center;
+    background:#10B981;
+    position: absolute;
   }

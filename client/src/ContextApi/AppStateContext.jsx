@@ -8,8 +8,9 @@ export const ContextProvider = ({ children }) => {
   const [adminSideBar, setAdminSideBar] = useState(true);
   const [loginModal, setLoginModal] = useState(false);
   const [message, setMessage] = useState("info");
-  const [active, setActive] = useState(true);
   const [severity, setSeverity] = useState("info");
+  const [isError, setIsError] = useState(false);
+  const [qty, setQty] = useState(1);
   return (
     <AppStateContext.Provider
       value={{
@@ -23,10 +24,12 @@ export const ContextProvider = ({ children }) => {
         setMessage,
         severity,
         setSeverity,
-        active,
-        setActive,
+        isError,
+        setIsError,
         adminSideBar,
         setAdminSideBar,
+        qty,
+        setQty,
       }}
     >
       {children}

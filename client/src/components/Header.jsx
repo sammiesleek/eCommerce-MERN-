@@ -9,7 +9,6 @@ import {
 } from "@icon-park/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Loader from "./Loader";
 {
   /* <MallBag theme="outline" size="24" fill="#333" />; */
 }
@@ -18,8 +17,11 @@ import { AppStateContext } from "../ContextApi/AppStateContext";
 import CartModal from "./CartModal";
 import LoginModal from "./LoginModal";
 import Alert from "./Alert";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const { cartItems } = useSelector((state) => state.cart);
+
   const {
     cartModal,
     setCartModal,
@@ -31,6 +33,8 @@ const Header = () => {
     setSeverity,
     active,
     setActive,
+    isError,
+    setIsError,
   } = useContext(AppStateContext);
   const [navState, setNavState] = useState(false);
   return (
@@ -65,7 +69,7 @@ const Header = () => {
             strokeWidth={3}
             className="md:hidden right-6 cursor-pointer absolute top-5 bg-white  rounded-full p-2"
           />
-          <div className="flex flex-col md:flex-row  bg-white w-[300px]   md:w-fit md:bg-transparent h-full ">
+          <div className="flex flex-col md:flex-row   w-[300px]   md:w-fit md:bg-transparent h-full ">
             <div className=" md:hidden flex justify-self-center py-8 w-full pl-3  border-b bg-gray-100">
               <h1 className="font-bold text-3xl">Apparels</h1>
             </div>
@@ -92,7 +96,7 @@ const Header = () => {
                 <p className="mb-0 ml-3 text-black">LOGIN</p>
               </span>
             </div>
-            <div className="flex flex-col md:flex-row  mt-5 md:mt-0 pl-3 gap-x-5">
+            <div className="flex flex-col md:flex-row  mt-5 md:mt-0 lg:mt-0 pl-3 gap-x-5">
               <Link
                 to="/"
                 className="font-normal py-8 md:py-0  border-b md:border-b-0 text-2xl md:text-lg"
@@ -144,7 +148,12 @@ const Header = () => {
               fill="#333"
             />
           </span>
-          <span>
+          <span className=" relative ">
+            {cartItems.length > 0 && (
+              <span className="cart_count font-bold text-sm text-white">
+                {cartItems.reduce((a, c) => a + c.qty, 0)}
+              </span>
+            )}
             <MallBag
               onClick={() => {
                 setCartModal(!cartModal);
@@ -157,14 +166,8 @@ const Header = () => {
           </span>
         </div>
       </div>
-      <CartModal />
+      <CartModal cartItems={cartItems} />
       <LoginModal />
-      <Alert
-        message={message}
-        severity={severity}
-        active={active}
-        onClose={() => setActive(false)}
-      />
     </div>
   );
 };
