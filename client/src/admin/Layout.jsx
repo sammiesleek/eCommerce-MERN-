@@ -1,16 +1,14 @@
-import React from "react";
 import Header from "./components/Header";
 import SideBar from "./components/SideBar";
 import { Outlet } from "react";
 
-const Admin = () => {
+const Layout = () => {
   return (
     <>
       <Header />
-      <Outlet></Outlet>
       <SideBar />
     </>
   );
 };
 
-export default Admin;
+export default Layout;

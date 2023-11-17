@@ -5,6 +5,7 @@ export const AppStateContext = createContext();
 export const ContextProvider = ({ children }) => {
   const [cartModal, setCartModal] = useState(false);
   const [registerModal, setRegisterMoadal] = useState(false);
+  const [adminSideBar, setAdminSideBar] = useState(true);
   const [loginModal, setLoginModal] = useState(false);
   const [message, setMessage] = useState("info");
   const [active, setActive] = useState(true);
@@ -24,6 +25,8 @@ export const ContextProvider = ({ children }) => {
         setSeverity,
         active,
         setActive,
+        adminSideBar,
+        setAdminSideBar,
       }}
     >
       {children}

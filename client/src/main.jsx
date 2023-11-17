@@ -18,21 +18,24 @@ import Products from "./pages/Products.jsx";
 import store from "../store.js";
 import { Provider } from "react-redux";
 import Dashboard from "./admin/pages/Dashboard.jsx";
-import Admin from "./admin/Admin.jsx";
-
+import Orders from "./admin/pages/Orders.jsx";
+import AdminRoute from "./admin/components/AdminRoute.jsx";
+import "bootstrap/dist/css/bootstrap.min.css";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<App />}>
-        <Route index={true} path="/" element={<HomePage />} />
+        <Route index exact element={<HomePage />} />
         <Route path="/products" exact element={<Products />} />
         <Route path="/products/:id" exact element={<Product />} />
         <Route path="/cart" exact element={<ShoppingCart />} />
         <Route path="/shipping" exact element={<OrderSummary />} />
         <Route path="/tracking" exact element={<TrackOrder />} />
       </Route>
-      <Route path="/admin" element={<Admin />}>
-        <Route index={true} path="/" element={<Dashboard />}></Route>
+      <Route path="/admin" element={<AdminRoute />}>
+        <Route index exact element={<Dashboard />} />
+        <Route path="/admin/orders" exact element={<Orders />} />
+        <Route path="/admin/products" exact element={<Orders />} />
       </Route>
     </Route>
   )
