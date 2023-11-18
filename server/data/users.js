@@ -3,6 +3,7 @@ const users = [
   {
     name: "Admin User",
     email: "admin@example.com",
+    phone: "07067820082",
     password: bcrypt.hashSync("123456", 10),
     isAdmin: true,
     address: "Ibadan Oyo State",
@@ -10,6 +11,7 @@ const users = [
   {
     name: "Sammy Ajayi",
     email: "sammy@example.com",
+    phone: "07067820082",
     password: bcrypt.hashSync("123456", 10),
     isAdmin: false,
     address: "Ibadan Oyo State",
@@ -17,6 +19,7 @@ const users = [
   {
     name: "mary Adeleke",
     email: "mary@example.com",
+    phone: "07067820082",
     password: bcrypt.hashSync("123456", 10),
     isAdmin: false,
     address: "Ibadan Oyo State",

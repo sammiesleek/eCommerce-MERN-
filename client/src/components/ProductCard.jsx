@@ -1,7 +1,13 @@
 import { Eyes, Like, MallBag } from "@icon-park/react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { addToCart } from "../slices/cartSlice";
+import { useDispatch } from "react-redux";
 const ProductCard = ({ product }) => {
+  const distpatch = useDispatch();
+  const addToCartHandler = () => {
+    distpatch(addToCart({ ...product, qty: 1 }));
+  };
   return (
     <div>
       <div className="flex flex-col justify-center items-center product_card">
@@ -15,6 +21,7 @@ const ProductCard = ({ product }) => {
               theme="outline"
               size="24"
               fill="#333"
+              onClick={() => addToCartHandler()}
             />
 
             <Like

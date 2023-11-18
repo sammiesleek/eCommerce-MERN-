@@ -4,7 +4,7 @@ import ProductSection from "../components/ProductSection";
 import { useParams } from "react-router-dom";
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
 import Loader from "../components/Loader";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../slices/cartSlice";
 import ProductQty from "../components/ProductQty";
@@ -24,6 +24,9 @@ const Product = () => {
     // setIsError,
   } = useContext(AppStateContext);
   const { id: productId } = useParams();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const {
     data: product,
     isLoading,

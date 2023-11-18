@@ -3,8 +3,14 @@ import { useContext } from "react";
 import { AppStateContext } from "../ContextApi/AppStateContext";
 import { Link } from "react-router-dom";
 import { NairaFormatter } from "../utils/cartUtils";
+import { addToCart, removeFromCart } from "../slices/cartSlice";
+import { useDispatch } from "react-redux";
 
 const CartModal = ({ cartItems }) => {
+  const distpatch = useDispatch();
+  const removeFromCartHandler = (id) => {
+    distpatch(removeFromCart(id));
+  };
   const { cartModal, setCartModal } = useContext(AppStateContext);
 
   return (
@@ -13,7 +19,7 @@ const CartModal = ({ cartItems }) => {
         cartModal ? "right-0" : "right-[-3000px]"
       }`}
     >
-      <div className="flex h-full w-[400px] bg-[#f7f7f7] relative z-30 overflow-hidden pt-20 px-5">
+      <div className="flex h-full w-[410px] bg-[#f7f7f7] relative z-30 overflow-hidden pt-20 ">
         <div className="flex  h-fit justify-between w-full items-center absolute top-0 left-0 right-0">
           <span className=" border cursor-pointer h-[50px] w-[50px] justify-center items-center flex">
             <Close
@@ -34,13 +40,13 @@ const CartModal = ({ cartItems }) => {
           </span>
         </div>
         {/* cart list starts here  */}
-        <div className="flex flex-col overflow-x-auto pb-20">
+        <div className="flex flex-col overflow-x-auto px-5 pb-20 w-full">
           {cartItems.map((cart, index) => (
-            <div key={index} className=" border-b flex h-fit py-4">
-              <div className="flex w-[80px] h-fit">
+            <div key={index} className=" border-b flex h-fit py-4 ">
+              <div className="flex w-[90px] h-fit">
                 <img src={cart.image} alt="" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full">
                 <p className="text-lg font-medium hover:text-[#CEA384] ease-linear transition-all cursor-pointer">
                   {cart.name}
                 </p>
@@ -51,9 +57,12 @@ const CartModal = ({ cartItems }) => {
                   {NairaFormatter.format(cart.price)}
                 </span>
               </div>
-              <div className="flex">
+              <div className="flex ">
                 <Delete
-                  className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all"
+                  onClick={() => {
+                    removeFromCartHandler(cart._id);
+                  }}
+                  className="flex cursor-pointer hover:text-[#CEA384] ease-linear transition-all ml-3"
                   theme="outline"
                   size="22"
                   strokeWidth={4}

@@ -1,12 +1,20 @@
 import { Delete, Right } from "@icon-park/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import ProductQty from "../components/ProductQty";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NairaFormatter } from "../utils/cartUtils";
+import { addToCart, removeFromCart } from "../slices/cartSlice";
 
 const ShoppingCart = () => {
   const { cartItems } = useSelector((state) => state.cart);
-
+  const distpatch = useDispatch();
+  const navigate = useNavigate();
+  const removeFromCartHandler = (id) => {
+    distpatch(removeFromCart(id));
+  };
+  const checkOutHandler = () => {
+    navigate("/login?redirect=/shipping");
+  };
   const getTotal = () => {
     let totalPrice = 0;
     cartItems.forEach((cart) => {
@@ -91,8 +99,15 @@ const ShoppingCart = () => {
                   </td>
 
                   <td className="px-6 py-4 font-bold text-bold border-r text-black hover:text-[#CEA384] ">
-                    <span className="flex h-full w-full items-center justify-center">
-                      <Delete theme="outline" size="24" strokeWidth={3} />
+                    <span className="flex h-full w-full items-center justify-center cursor-pointer">
+                      <Delete
+                        onClick={() => {
+                          removeFromCartHandler(cart._id);
+                        }}
+                        theme="outline"
+                        size="24"
+                        strokeWidth={3}
+                      />
                     </span>
                   </td>
                 </tr>
@@ -109,6 +124,7 @@ const ShoppingCart = () => {
             <button
               style={{ letterSpacing: "2px" }}
               className=" px-10 flex justify-center items-center h-[54px] hover:bg-[#CEA384] bg-black text-white transition-all ease-linear font-semibold w-fit"
+              onClick={() => checkOutHandler()}
             >
               PROCEEED TO CHECKOUT
             </button>
