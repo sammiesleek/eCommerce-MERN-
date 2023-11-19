@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // cookie parser
 app.use(cookieParser());
-// app.use(cors());
+app.use(cors());
 
 app.get("/api", (req, res) => {
   res.send("API is running...");

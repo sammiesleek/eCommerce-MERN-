@@ -196,3 +196,13 @@ content: '';
     background:#10B981;
     position: absolute;
   }
+
+
+  .profile_click .profile_tab{
+      display: none;
+      transition: all .4s ease;
+  }
+
+  .profile_click:hover .profile_tab{
+    display: flex;
+  }

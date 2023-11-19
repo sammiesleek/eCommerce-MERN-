@@ -3,12 +3,12 @@ import StatusAlert, { StatusAlertService } from "react-status-alert";
 import "react-status-alert/dist/status-alert.css";
 import { AppStateContext } from "../ContextApi/AppStateContext";
 
-const Alert = () => {
-  const { message, setMessage, severity, setSeverity } =
-    useContext(AppStateContext);
+export const alertMessage = () => {
+  // const { message, setMessage, severity, setSeverity } =
+  //   useContext(AppStateContext);
 
   const showSuccessAlert = () => {
-    StatusAlertService.showError(message);
+    StatusAlertService.showError("message");
   };
 
   return (
@@ -99,5 +99,3 @@ const Alert = () => {
   //   );
   // }
 };
-
-export default Alert;

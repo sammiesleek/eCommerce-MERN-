@@ -16,8 +16,8 @@ import { useContext } from "react";
 import { AppStateContext } from "../ContextApi/AppStateContext";
 import CartModal from "./CartModal";
 import LoginModal from "./LoginModal";
-import Alert from "./Alert";
 import { useSelector } from "react-redux";
+import SignUpModal from "./SignUpModal";
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -27,6 +27,8 @@ const Header = () => {
     setCartModal,
     loginModal,
     setLoginModal,
+    registerModal,
+    setRegisterMoadal,
     message,
     setMessage,
     severity,
@@ -129,15 +131,31 @@ const Header = () => {
               fill="#333"
             />
           </span>
-          <span className="hidden md:flex">
+          <span className="hidden md:flex relative profile_click">
+            <span className="absolute top-3 right-0    flex-col py-4 px-3 w-[200px] profile_tab">
+              <span className="bg-white border flex flex-col py-4 text-base  text-black gap-y-1">
+                <Link
+                  to="/login"
+                  className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
+                >
+                  Register
+                </Link>
+                <Link className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer">
+                  Profile
+                </Link>
+              </span>
+            </span>
             <User
               className="flex cursor-pointer "
               theme="outline"
               size="24"
               fill="#333"
-              onClick={() => {
-                setLoginModal(true);
-              }}
             />
           </span>
           <span>
@@ -168,6 +186,7 @@ const Header = () => {
       </div>
       <CartModal cartItems={cartItems} />
       <LoginModal />
+      <SignUpModal />
     </div>
   );
 };

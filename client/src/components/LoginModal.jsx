@@ -4,7 +4,8 @@ import { useContext } from "react";
 import { AppStateContext } from "../ContextApi/AppStateContext";
 
 const LoginModal = () => {
-  const { loginModal, setLoginModal } = useContext(AppStateContext);
+  const { loginModal, setLoginModal, setRegisterMoadal } =
+    useContext(AppStateContext);
   return (
     <div
       className={`fixed top-0  h-screen w-screen flex  ${
@@ -48,7 +49,13 @@ const LoginModal = () => {
           >
             LOGIN
           </button>
-          <span className="mt-3 text-gray-500 cursor-pointer hover:text-[#CEA384]">
+          <span
+            onClick={() => {
+              setRegisterMoadal(true);
+              setLoginModal(false);
+            }}
+            className="mt-3 text-gray-500 cursor-pointer hover:text-[#CEA384]"
+          >
             Register
           </span>
           <span className="mt-3 text-gray-500 cursor-pointer hover:text-[#CEA384]">

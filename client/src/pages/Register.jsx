@@ -1,23 +1,12 @@
 import { useContext } from "react";
 import { AppStateContext } from "../ContextApi/AppStateContext";
 import { Close } from "@icon-park/react";
-const SignUpModal = () => {
-  const { registerModal, setRegisterMoadal, setLoginModal } =
-    useContext(AppStateContext);
+import { Link } from "react-router-dom";
+const Register = () => {
+  const { registerModal, setRegisterMoadal } = useContext(AppStateContext);
   return (
-    <div
-      className={`fixed top-0  h-screen w-screen flex  ${
-        registerModal ? "left-0" : "left-[-4000px]"
-      }`}
-    >
+    <div className="pt-[130px]">
       <div className="flex flex-col  w-[400px] max-w-[500px] bg-white m-auto py-4 px-6 relative z-10">
-        <Close
-          strokeWidth={5}
-          onClick={() => {
-            setRegisterMoadal(false);
-          }}
-          className="absolute right-5 top-5 cursor-pointer"
-        />
         <h4 className="text-center text-3xl font-semibold my-5">Register</h4>
 
         <div className="flex flex-col mt-10 gap-y-10">
@@ -61,25 +50,16 @@ const SignUpModal = () => {
           >
             REGISTER
           </button>
-          <span
-            onClick={() => {
-              setRegisterMoadal(false);
-              setLoginModal(true);
-            }}
+          <Link
+            to="/"
             className="mt-3 text-gray-500 cursor-pointer hover:text-[#CEA384]"
           >
-            click here to Login
-          </span>
+            click here to Log in
+          </Link>
         </div>
       </div>
-      <div
-        onClick={() => {
-          setRegisterMoadal(false);
-        }}
-        className="absolute w-full h-full bg-[rgba(32,32,32,0.5)] "
-      ></div>
     </div>
   );
 };
 
-export default SignUpModal;
+export default Register;

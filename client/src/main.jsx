@@ -22,6 +22,7 @@ import Orders from "./admin/pages/Orders.jsx";
 import AdminRoute from "./admin/components/AdminRoute.jsx";
 import ShoppingCart from "./pages/ShoppingCart.jsx";
 import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,6 +33,8 @@ const router = createBrowserRouter(
         <Route path="/products/:id" exact element={<Product />} />
         <Route path="/cart" exact element={<ShoppingCart />} />
         <Route path="/login" exact element={<Login />} />
+        <Route path="/register" exact element={<Register />} />
+        <Route path="/register" exact element={<Login />} />
         <Route path="/shipping" exact element={<OrderSummary />} />
         <Route path="/tracking" exact element={<TrackOrder />} />
       </Route>
