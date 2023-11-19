@@ -3,6 +3,10 @@ import Header from "./components/Header";
 import { Outlet } from "react-router-dom";
 import Footer from "./components/Footer";
 import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import StatusAlert from "react-status-alert";
+import "react-status-alert/dist/status-alert.css";
 
 function App() {
   useEffect(() => {
@@ -11,7 +15,8 @@ function App() {
   return (
     <>
       <Header />
-
+      <ToastContainer />
+      <StatusAlert />
       <Outlet />
       {/* 
       <Route path="/" exact element={<HomePage />} />

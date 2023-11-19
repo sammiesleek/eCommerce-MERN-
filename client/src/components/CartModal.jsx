@@ -90,7 +90,14 @@ const CartModal = ({ cartItems }) => {
             style={{ letterSpacing: "3px" }}
             className="w-1/2 py-4 font-semibold text-sm flex justify-center text-center items-center cursor-pointer bg-[#000000] text-white hover:bg-[#CEA384] ease-linear transition-all"
           >
-            <p>CHECK OUT</p>
+            <Link
+              onClick={() => {
+                setCartModal(false);
+              }}
+              to="/shipping"
+            >
+              CHECK OUT
+            </Link>
           </span>
         </div>
       </div>

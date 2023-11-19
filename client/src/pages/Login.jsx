@@ -1,23 +1,17 @@
-import { Close } from "@icon-park/react";
-import { AppStateContext } from "../ContextApi/AppStateContext";
-import { useContext, useEffect, useState } from "react";
+// import { Close } from "@icon-park/react";
+// import { AppStateContext } from "../ContextApi/AppStateContext";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Loader from "../components/Loader";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
+import Loader from "../components/Loader";
+import { toast } from "react-toastify";
+import { StatusAlertService } from "react-status-alert";
 const Login = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  //  const [formData, setFormData] = useState({
-  //    name: "",
-  //    email: "",
-  //    address: "",
-  //    password:"",
-  //    passwordCheck:"",
-  //    phone:""
-  //  });
 
   const [formData, setFormData] = useState({
     email: "",
@@ -49,17 +43,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.email !== "" && formData.email) {
-      console.log(formData);
-      // try {
-      const res = await login({ formData }).unwrap();
-      // dispath(setCredentials({ ...res }));
-      // navigate(redirect);
-      // } catch (e) {
-      // console.log(error);
-      // }
+    if (formData.email !== "" && formData.password) {
+      try {
+        const res = await login(formData).unwrap();
+        dispath(setCredentials({ ...res }));
+        navigate(redirect);
+      } catch (error) {
+        console.log(error);
+        toast.error(error?.data?.message || error.error);
+        // StatusAlertService.showError(error.error);
+      }
     } else {
-      console.log("fields can not be empty");
+      StatusAlertService.showError("fields can not be empty");
     }
   };
   return (
@@ -97,10 +92,12 @@ const Login = () => {
                 alignContent: "center",
                 justifySelf: "center",
               }}
+              disabled={isLoading}
               className="flex w-fit bg-black text-white font-semibold px-6 py-3 hover:bg-[#CEA384] transition-all ease-linear"
             >
               LOGIN
             </button>
+            {isLoading && <Loader size="40" />}
             <Link
               to={redirect ? `/register?redirect=${redirect}` : "/register"}
               className="mt-3 text-gray-500 cursor-pointer hover:text-[#CEA384]"

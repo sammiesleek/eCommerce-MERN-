@@ -20,7 +20,7 @@ export const authUser = asyncHandler(async (req, res) => {
       // token: token,
     });
   } else {
-    res.status(401);
+    res.status(501);
     throw new Error("Invalid email or password");
   }
 });
@@ -28,14 +28,16 @@ export const authUser = asyncHandler(async (req, res) => {
 // @route POST /api/users
 // @access public
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, phone, address } = req.body;
+  const { firstName, lastName, name, email, password, phone, address } =
+    req.body;
   const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400);
     throw new Error("This Email has been used");
   } else {
     const user = await User.create({
-      name,
+      firstName,
+      lastName,
       email,
       password,
       phone,
@@ -47,7 +49,8 @@ export const registerUser = asyncHandler(async (req, res) => {
 
       res.status(201).json({
         _id: user._id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         phone: user.phone,
         address: user.address,

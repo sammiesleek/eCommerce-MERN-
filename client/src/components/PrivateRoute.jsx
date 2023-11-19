@@ -1,9 +1,9 @@
+import { useSelector } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
 const PrivateRoute = () => {
-  const a = 1;
-  const b = 2;
+  const { userInfo } = useSelector((state) => state.auth);
 
-  if (a < b) {
+  if (userInfo) {
     return <Outlet />;
   } else {
     return <Navigate to="/" replace />;

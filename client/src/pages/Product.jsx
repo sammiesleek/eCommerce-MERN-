@@ -11,6 +11,9 @@ import ProductQty from "../components/ProductQty";
 import { AppStateContext } from "../ContextApi/AppStateContext";
 
 const Product = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const {
     qty,
     // setQty,
