@@ -18,6 +18,7 @@ const Login = () => {
     password: "",
   });
   const handleChange = (e) => {
+    console.log("first");
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
