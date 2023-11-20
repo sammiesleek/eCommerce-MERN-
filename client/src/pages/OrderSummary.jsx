@@ -6,7 +6,10 @@ const OrderSummary = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const dispath = useDispatch();
+  const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
+  const { shippingAddress } = useSelector((state) => state.cart);
   const data = {
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
