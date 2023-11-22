@@ -1,23 +1,45 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { NairaFormatter } from "../utils/cartUtils";
+import { clearCartItems, saveShippindAddress } from "../slices/cartSlice";
+import { useCreateOrderMutation } from "../slices/ordersApiSlice";
+import { toast } from "react-toastify";
 
 const OrderSummary = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
-  const { shippingAddress } = useSelector((state) => state.cart);
+
+  const {
+    cartItems,
+    itemsPrice,
+    shippingPrice,
+    taxPrice,
+    totalPrice,
+    shippingAddress,
+  } = useSelector((state) => state.cart);
+
+  useEffect(() => {
+    if (!cartItems || cartItems.length < 1) {
+      navigate("/");
+    }
+  });
+  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
+
   const data = {
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
     address: userInfo.address,
+    phone: userInfo.phone,
   };
-  const [formData, setFormData] = useState(userInfo);
+  const [formData, setFormData] = useState(
+    shippingAddress ? shippingAddress : data
+  );
   const handleChange = (e) => {
-    console.log(e.target.value);
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -26,7 +48,26 @@ const OrderSummary = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(formData);
+    try {
+      dispatch(saveShippindAddress(formData));
+
+      const res = await createOrder({
+        orderItems: cartItems,
+        shippingAddress,
+        paymentMethod: "online",
+        itemsPrice: itemsPrice,
+        taxPrice: taxPrice,
+        shippingPrice: shippingPrice,
+        totalPrice: totalPrice,
+      }).unwrap();
+      navigate(`/tracking/${res._id}`);
+
+      setTimeout(() => {
+        dispatch(clearCartItems());
+      }, 200);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
@@ -90,29 +131,34 @@ const OrderSummary = () => {
             <span className=" flex w-full pl-4 py-4 border-b">
               <span className="flex w-[300px]">
                 <p className=" font-semibold text-gray-600 text-lg">Items</p>
-                <p className="ml-auto">099</p>
+                <p className="ml-auto">{NairaFormatter.format(itemsPrice)}</p>
               </span>
             </span>
             <span className=" flex w-full pl-4 py-4 border-b">
               <span className="flex w-[300px]">
                 <p className=" font-semibold text-gray-600 text-lg">Delivery</p>
-                <p className="ml-auto">099</p>
+                <p className="ml-auto">
+                  {NairaFormatter.format(shippingPrice)}
+                </p>
               </span>
             </span>
             <span className=" flex w-full pl-4 py-4 border-b">
               <span className="flex w-[300px]">
                 <p className=" font-semibold text-gray-600 text-lg">VAT</p>
-                <p className="ml-auto">099</p>
+                <p className="ml-auto">{NairaFormatter.format(taxPrice)}</p>
               </span>
             </span>
             <span className=" flex w-full pl-4 py-4 border-b">
               <span className="flex w-[300px]">
                 <p className=" font-semibold text-gray-600 text-lg">Total</p>
-                <p className="ml-auto">099</p>
+                <p className="ml-auto">{NairaFormatter.format(totalPrice)}</p>
               </span>
             </span>
-            <span className=" flex w-full  py-4  bg-black hover:bg-[#CEA384] justify-center items-center">
-              <button className=" text-white  font-bold text-xl">
+            <span className=" flex w-full   bg-black hover:bg-[#CEA384] justify-center items-center">
+              <button
+                className="  py-4  text-white  font-bold text-xl w-full
+              h-full"
+              >
                 Complete Order
               </button>
             </span>

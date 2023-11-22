@@ -56,7 +56,7 @@ const Register = () => {
             if (formData.password === formData.passwordCheck) {
               delete formData.passwordCheck;
               formData.isAdmin = true;
-              console.log(formData);
+
               try {
                 const res = await register(formData).unwrap();
                 dispath(setCredentials({ ...res }));

@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import SignUpModal from "./SignUpModal";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,13 @@ const Header = () => {
       navigate("/login");
     } catch (error) {
       console.log(error);
+    }
+  };
+  const handleCart = () => {
+    // toast.info("Your cart is empty");
+    cartItems.length > 0 && setCartModal(!cartModal);
+    if (cartItems.length < 1) {
+      toast.info("Your cart is empty");
     }
   };
   return (
@@ -266,9 +274,7 @@ const Header = () => {
               </span>
             )}
             <MallBag
-              onClick={() => {
-                setCartModal(!cartModal);
-              }}
+              onClick={handleCart}
               className="flex cursor-pointer"
               theme="outline"
               size="24"

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { NairaFormatter } from "../utils/cartUtils";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
+import { useEffect } from "react";
 
 const ShoppingCart = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -15,6 +16,14 @@ const ShoppingCart = () => {
   const checkOutHandler = () => {
     navigate("/login?redirect=/shipping");
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  useEffect(() => {
+    if (!cartItems || cartItems.length < 1) {
+      navigate("/");
+    }
+  });
   const getTotal = () => {
     let totalPrice = 0;
     cartItems.forEach((cart) => {

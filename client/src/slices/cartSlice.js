@@ -29,10 +29,18 @@ const cartSlice = createSlice({
       state.shippingAddress = action.payload;
       return updateCart(state);
     },
+    clearCartItems: (state) => {
+      state.cartItems = [];
+      return updateCart(state);
+    },
   },
 });
 
-export const { addToCart, removeFromCart, saveShippindAddress } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  saveShippindAddress,
+  clearCartItems,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

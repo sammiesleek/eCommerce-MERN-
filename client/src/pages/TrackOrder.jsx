@@ -1,4 +1,19 @@
+import { useSelector } from "react-redux";
+import { NairaFormatter } from "../utils/cartUtils";
+import { useEffect } from "react";
+
 const TrackOrder = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  const {
+    shippingAddress,
+
+    itemsPrice,
+    shippingPrice,
+    taxPrice,
+    totalPrice,
+  } = useSelector((state) => state.cart);
   return (
     <div className="py-[100px] proces_order px-4 min-h-screen">
       <div className="flex  my-10">
@@ -15,26 +30,20 @@ const TrackOrder = () => {
             <span className="flex items-center">
               <p className="font-bold text-gray-800 text-xl">Name:</p>
               <p className="font-normal ml-5 text-gray-600 text-lg">
-                Sammy Ajayi
+                {shippingAddress.lastName} {shippingAddress.firstName}
               </p>
             </span>
-            <span className="flex items-center">
-              <p className="font-bold text-gray-800 text-xl">Email:</p>
-              <p className="font-normal ml-5 text-gray-600 text-lg">
-                Sammy Ajayi
-              </p>
-            </span>
+
             <span className="flex items-center">
               <p className="font-bold text-gray-800 text-xl">Phone Number:</p>
               <p className="font-normal ml-5 text-gray-600 text-lg">
-                08006696059
+                {shippingAddress.phone}
               </p>
             </span>
             <span className="flex items-center">
               <p className="font-bold text-gray-800 text-xl">Full Address:</p>
               <p className="font-normal ml-5 text-gray-600 text-lg">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas,
-                eligendi.
+                {shippingAddress.address}
               </p>
             </span>
           </div>
@@ -51,25 +60,25 @@ const TrackOrder = () => {
           <span className=" flex w-full pl-4 py-4 border-b">
             <span className="flex w-[300px]">
               <p className=" font-bold text-gray-800 text-lg">Items</p>
-              <p className="ml-auto">099</p>
+              <p className="ml-auto">{NairaFormatter.format(itemsPrice)}</p>
             </span>
           </span>
           <span className=" flex w-full pl-4 py-4 border-b">
             <span className="flex w-[300px]">
               <p className=" font-bold text-gray-800 text-lg">Delivery</p>
-              <p className="ml-auto">099</p>
+              <p className="ml-auto">{NairaFormatter.format(shippingPrice)}</p>
             </span>
           </span>
           <span className=" flex w-full pl-4 py-4 border-b">
             <span className="flex w-[300px]">
               <p className=" font-bold text-gray-800 text-lg">VAT</p>
-              <p className="ml-auto">099</p>
+              <p className="ml-auto">{NairaFormatter.format(taxPrice)}</p>
             </span>
           </span>
           <span className=" flex w-full pl-4 py-4 border-b">
             <span className="flex w-[300px]">
               <p className=" font-bold text-gray-800 text-lg">Total</p>
-              <p className="ml-auto">099</p>
+              <p className="ml-auto">{NairaFormatter.format(totalPrice)}</p>
             </span>
           </span>
           <span className=" flex w-full  py-4  bg-black hover:bg-[#CEA384] justify-center items-center">

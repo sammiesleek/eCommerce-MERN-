@@ -36,9 +36,9 @@ const router = createBrowserRouter(
         <Route path="/login" exact element={<Login />} />
         <Route path="/register" exact element={<Register />} />
         <Route path="/register" exact element={<Login />} />
-        <Route path="/tracking" exact element={<TrackOrder />} />
         <Route path="" element={<PrivateRoute />}>
           <Route path="/shipping" exact element={<OrderSummary />} />
+          <Route path="/tracking" exact element={<TrackOrder />} />
         </Route>
       </Route>
       <Route path="/admin" element={<AdminRoute />}>

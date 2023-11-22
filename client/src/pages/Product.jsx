@@ -61,7 +61,7 @@ const Product = () => {
           </div>
 
           {isLoading ? (
-            <Loader />
+            <Loader size="100" />
           ) : error ? (
             <h1>{error?.error}</h1>
           ) : (

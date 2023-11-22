@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { addToCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
+import { NairaFormatter } from "../utils/cartUtils";
 const ProductCard = ({ product }) => {
   const distpatch = useDispatch();
   const addToCartHandler = () => {
@@ -43,9 +44,11 @@ const ProductCard = ({ product }) => {
             to={`/products/${product._id}`}
             className="font-semibold text-xl"
           >
-            Kathy Tote Bag
+            {product.name}
           </Link>
-          <p className="font-bold  text-[#CEA384]">$100.00</p>
+          <p className="font-bold  text-[#CEA384]">
+            {NairaFormatter.format(product.price)}
+          </p>
         </span>
       </div>
     </div>
