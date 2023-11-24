@@ -35,10 +35,12 @@ const OrderSummary = () => {
     lastName: userInfo.lastName,
     address: userInfo.address,
     phone: userInfo.phone,
+    email: userInfo.email,
   };
   const [formData, setFormData] = useState(
-    shippingAddress ? shippingAddress : data
+    shippingAddress.address ? shippingAddress : data
   );
+
   const handleChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -87,7 +89,7 @@ const OrderSummary = () => {
                   className="border-b focus:outline-none bg-transparent py-3 focus:border-b-black w-full  px-2 font-normal text-base"
                   placeholder="Name"
                   type="text"
-                  value={formData.firstName + " " + formData.lastName}
+                  value={userInfo.firstName + " " + userInfo.lastName}
                   disabled
                 />
               </div>

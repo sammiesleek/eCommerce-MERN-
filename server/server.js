@@ -24,8 +24,8 @@ app.get("/api", (req, res) => {
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
-app.get("/api/config/paypal", (req, res) =>
-  res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
+app.get("/api/config/paystack", (req, res) =>
+  res.status(200).send({ clientId: process.env.REACT_APP_PAYSTAC_KEY })
 );
 
 app.listen(port, () => console.log(`server running on port ${port}`));

@@ -5,6 +5,7 @@ import { makePayment, paystackScript } from "../functions";
 import {
   useConfirmPaymentMutation,
   useGetOrderDetailsQuery,
+  useGetPaystackClientIdQuery,
 } from "../slices/ordersApiSlice";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
@@ -26,21 +27,17 @@ const TrackOrder = () => {
     isLoading,
     isError,
   } = useGetOrderDetailsQuery(orderId);
+  const {
+    data: clientId,
+    refetch: refectf,
+    isLoading: loadingPaystack,
+    error: errorPaystack,
+  } = useGetPaystackClientIdQuery();
 
-  // const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
-
-  // const {
-  //   data: paypal,
-  //   isLoading: loadingPaypal,
-  //   error: errorPaypal,
-  // } = useGetPaypalClientIdQuery();
-
-  const { userInfo } = useSelector((state) => state.auth);
+  // const { userInfo } = useSelector((state) => state.auth);
   const [paymentLoading, setPaymentLoading] = useState(false);
 
-  const { shippingAddress, itemsPrice, shippingPrice, taxPrice, totalPrice } =
-    useSelector((state) => state.cart);
-  // console.log(shippingAddress);
+  const { shippingAddress } = useSelector((state) => state.cart);
 
   if (isLoading) {
     return (
@@ -52,60 +49,30 @@ const TrackOrder = () => {
 
   const handlePayment = () => {
     makePayment(
+      clientId.clientId,
       orderId,
       order.totalPrice,
       function (response) {
-        //this happens after the payment is completed successfully
+        setPaymentLoading(true);
         var ref = response.reference;
         try {
-          const data = { orderRef: ref, amount: order.totalPrice };
+          const data = { ref, orderId, amount: order.totalPrice };
           const res = confirmPayment(data).unwrap();
-          console.log(res);
-          toast.info("working");
+          res
+            .then((response) => {
+              if (response.success) toast.success("Payment confirmed");
+
+              setPaymentLoading(false);
+              window.location.reload();
+            })
+            .catch((error) => {
+              toast.error(error?.data?.message);
+              setPaymentLoading(false);
+            });
         } catch (error) {
-          toast.error(error);
+          toast.error(error?.data?.message);
+          setPaymentLoading(false);
         }
-        // setPaymentLoading(true);
-        // console.log(confirmPayment({ ref, amount: order.totalPrice }));
-
-        // TODO: replace with await
-        // Make an AJAX call to your server with the reference to verify the transaction
-        // confirmBukkyTransaction(reference, amount, purpose)
-        //   .then((response) => {
-        //     setError(true);
-        //     setErrorMessage("Payment processed.");
-        //     setErrorSeverity("info");
-
-        //        getUserCredits()
-        //       .then((response) => {
-        //                .updateUserCredits(
-        //             response.data[0].id,
-        //             amount * pricePerCredit +
-        //               parseFloat(response.data[0].amount)
-        //           )
-        //           .then((response) => {
-        //             router.push("/bukky");
-        //           })
-        //           .catch((err) => {
-        //             setError(true);
-        //             setErrorMessage(
-        //               "Error updating your credit balance, Please contact info@beadaut.com to rectify. "
-        //             );
-        //             setErrorSeverity("error");
-        //           });
-        //       })
-        //       .catch((err) => {
-        //         console.log(err);
-        //       });
-        //   })
-        //   .catch((error) => {
-        //     console.log("Payment confirmation error: ", error);
-        //     setError(true);
-        //     setErrorSeverity("error");
-        //     setErrorMessage(
-        //       "We are sorry, something went wrong. Please contact info@beadaut.com to rectify."
-        //     );
-        //   });
       },
       function () {
         toast.info("Payment cancled");
@@ -196,7 +163,7 @@ const TrackOrder = () => {
                 <p className=" bg-red-200 px-3 py-1 w-fit mb-2">Not paid</p>
                 <span className=" flex w-full  py-4  justify-center items-center">
                   {paymentLoading ? (
-                    <Loader />
+                    <Loader size="40" />
                   ) : (
                     <p className="flex cursor-pointer" onClick={handlePayment}>
                       pay{" "}

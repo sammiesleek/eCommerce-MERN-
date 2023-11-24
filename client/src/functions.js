@@ -14,21 +14,22 @@ export function paystackScript() {
 }
 
 export const makePayment = (
+  clientId,
   orderId,
   amount,
   callbackFunction,
   onCloseFunction
 ) => {
+  console.log(clientId);
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  let date = new Date();
-  let ref = orderId;
+
   let handler = window.PaystackPop.setup({
-    key: "pk_test_ca26bcedef80cba1f681a219817361c6d2406521",
+    key: clientId,
     email: user.email,
-    amount: parseInt(amount),
+    amount: amount * 100,
     firstname: user.firstName,
     lastname: user.lastName,
-    ref: date.getTime(),
+    ref: orderId,
     callback: callbackFunction,
     onClose: onCloseFunction,
   });

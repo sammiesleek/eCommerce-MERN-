@@ -110,7 +110,28 @@ export const gettAllOrders = asyncHandler(async (req, res) => {
 });
 
 export const confirmPayment = asyncHandler(async (req, res) => {
-  const status = await verifyPaystackPayment("655e146dca685d88c278dde8");
+  const status = await verifyPaystackPayment(req.body.ref);
 
-  res.send(status);
+  if (status.status === "success" && status.amount === req.body.amount * 100) {
+    const order = await Order.findById(req.body.orderId);
+    if (order) {
+      (order.isPaid = true),
+        (order.PaidAt = status.paid_at),
+        (order.paymentResult = {
+          id: req.body.id,
+          status: status.status,
+          update_time: status.paid_at,
+          email_address: status.customer.email,
+        });
+
+      order.save();
+      res.status(200).json({ success: true });
+    } else {
+      res.status(402);
+      throw new Error("Error updating order");
+    }
+  } else {
+    res.status(402);
+    throw new Error("Error validating payment");
+  }
 });

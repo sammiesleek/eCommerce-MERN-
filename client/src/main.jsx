@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import "./assets/bootstrap/bootstrap.css";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { ContextProvider } from "./ContextApi/AppStateContext.jsx";
 import {
   createBrowserRouter,
@@ -55,9 +54,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <ContextProvider>
-        <PayPalScriptProvider deferLoading={false}>
-          <RouterProvider router={router} />
-        </PayPalScriptProvider>
+        <RouterProvider router={router} />
       </ContextProvider>
     </Provider>
   </React.StrictMode>
