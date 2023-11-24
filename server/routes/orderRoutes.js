@@ -9,6 +9,7 @@ import {
   updateOrderToPaid,
   gettAllOrders,
   updateOrderToDelivered,
+  confirmPayment,
 } from "../controllers/orderController.js";
 
 router
@@ -16,7 +17,9 @@ router
   .post(protect, addOrderItems)
   .get(protect, adminProtect, gettAllOrders);
 router.route("/myorders").get(protect, getMyOrders);
-router.route("/:id").get(protect, adminProtect, getOrderById);
+router.route("/confirmpayment").post(protect, confirmPayment);
+router.route("/:id").get(protect, getOrderById);
+router.route("/:id/pay").put(protect, updateOrderToPaid);
 router.route("/:id/pay").put(protect, updateOrderToPaid);
 router.route("/:id/deliver").put(protect, adminProtect, updateOrderToDelivered);
 

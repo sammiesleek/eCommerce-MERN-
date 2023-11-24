@@ -88,9 +88,10 @@ const CartModal = ({ cartItems }) => {
           </span>
           <span
             style={{ letterSpacing: "3px" }}
-            className="w-1/2 py-4 font-semibold text-sm flex justify-center text-center items-center cursor-pointer bg-[#000000] text-white hover:bg-[#CEA384] ease-linear transition-all"
+            className="w-1/2  font-semibold text-sm flex justify-center text-center items-center cursor-pointer bg-[#000000] text-white hover:bg-[#CEA384] ease-linear transition-all"
           >
             <Link
+              className="py-4 w-full"
               onClick={() => {
                 setCartModal(false);
               }}

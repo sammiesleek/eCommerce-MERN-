@@ -1,5 +1,7 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Order from "../models/orderModel.js";
+import https from "https";
+import { verifyPaystackPayment } from "../utils/functions.js";
 
 // @create new order
 // @route  POST /api/orders
@@ -72,7 +74,23 @@ export const getOrderById = asyncHandler(async (req, res) => {
 // @access private
 
 export const updateOrderToPaid = asyncHandler(async (req, res) => {
-  res.send("update order to paid");
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    (order.isPaid = true),
+      (order.PaidAt = Date.now()),
+      (order.paymentResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.email_address,
+      });
+
+    const updatedOrder = await order.save();
+    res.status(200).json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
 });
 
 // @update order to paid
@@ -89,4 +107,10 @@ export const updateOrderToDelivered = asyncHandler(async (req, res) => {
 
 export const gettAllOrders = asyncHandler(async (req, res) => {
   res.send("get all orders");
+});
+
+export const confirmPayment = asyncHandler(async (req, res) => {
+  const status = await verifyPaystackPayment("655e146dca685d88c278dde8");
+
+  res.send(status);
 });

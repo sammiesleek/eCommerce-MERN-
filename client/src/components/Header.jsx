@@ -163,13 +163,14 @@ const Header = () => {
                 Home
               </Link>
               <Link
+                to="/products"
                 onClick={() => {
                   setNavState(false);
                 }}
                 className="font-normal py-8 md:py-0  border-b md:border-b-0 text-2xl md:text-lg"
               >
                 {" "}
-                Latest Product
+                Products
               </Link>
               <Link
                 onClick={() => {
@@ -177,8 +178,7 @@ const Header = () => {
                 }}
                 className="font-normal py-8 md:py-0  border-b md:border-b-0 text-2xl md:text-lg"
               >
-                {" "}
-                Contact Us{" "}
+                My Orders
               </Link>
               <Link
                 onClick={() => {
