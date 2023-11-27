@@ -2,7 +2,22 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        dark: {
+          bgHeavy: "#111827",
+          bgMid: "#1f2937",
+          textPrimary: "#e1e4e8",
+          textSecondary: "#4b5563",
+        },
+        light: {
+          bgHeavy: "#f8fafb",
+          bgMid: "#ffffff",
+          textPrimary: "#4b5563",
+          textSecondary: "#9ca3af",
+        },
+      },
+    },
 
     screens: {
       sm: "640px",

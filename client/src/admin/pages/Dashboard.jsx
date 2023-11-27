@@ -1,45 +1,117 @@
 import { useContext } from "react";
 import { AppStateContext } from "../../ContextApi/AppStateContext";
+import StatCard from "../components/StatCard";
+import { Buy } from "@icon-park/react";
+import { NairaFormatter } from "../../utils/cartUtils";
+
+const stats = [
+  {
+    title: "Today's Orders ",
+    amount: "4000",
+    icon: <Buy theme="outline" strokeWidth={3} />,
+    bg: "#0d9488",
+  },
+  {
+    title: "This Month's Sales ",
+    amount: "4000",
+    icon: <Buy theme="outline" strokeWidth={3} />,
+    bg: "#fa923b",
+  },
+  {
+    title: "Last Month's Sales  ",
+    amount: "4000",
+    icon: <Buy theme="outline" strokeWidth={3} />,
+    bg: "#3b82f1",
+  },
+  {
+    title: "All Time Sales ",
+    amount: "4000",
+    icon: <Buy theme="outline" strokeWidth={3} />,
+    bg: "#039669",
+  },
+  {
+    title: "All Time Sales ",
+    amount: "4000",
+    icon: <Buy theme="outline" strokeWidth={3} />,
+    bg: "#039669",
+  },
+];
+const statsm = [
+  {
+    title: "Total Order",
+    count: 30,
+    icon: <Buy theme="outline" strokeWidth={3} />,
+    bg: "#0d9488",
+  },
+  {
+    title: "Orders Pending ",
+    count: 100,
+    icon: <Buy theme="outline" strokeWidth={3} />,
+    bg: "#fa923b",
+  },
+  {
+    title: "Orders Processing ",
+    count: 120,
+    icon: <Buy theme="outline" strokeWidth={3} />,
+    bg: "#3b82f1",
+  },
+  {
+    title: "Orders Delivered",
+    count: 200,
+    icon: <Buy theme="outline" strokeWidth={3} />,
+    bg: "#039669",
+  },
+];
 
 const Dashboard = () => {
   const { adminSideBar, setAdminSideBar } = useContext(AppStateContext);
   return (
-    <div className={`${adminSideBar ? "width-adjust" : "w-full"} `}>
-      <h1 className="text-5xl">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia eum
-        dolore, fugit voluptatem deserunt officiis. Ipsa esse alias delectus
-        quasi, provident consequuntur ab similique quae dolorem iure quod
-        aliquid est consequatur saepe debitis praesentium tenetur voluptatibus
-        modi ea. Non, saepe aut? Distinctio quae enim, iste officia inventore
-        esse amet ex consectetur recusandae a tempore beatae ullam soluta eos
-        tempora ut, voluptate quisquam facilis accusantium molestiae est
-        laboriosam odio voluptas atque! Aliquid voluptates exercitationem optio
-        enim ipsum tenetur beatae illum, soluta possimus sit ducimus voluptas?
-        Excepturi sapiente nostrum fugiat id repellat inventore error labore
-        dolore blanditiis, velit debitis a perferendis voluptates, eligendi
-        dolor totam cupiditate accusamus quaerat. Placeat excepturi aspernatur
-        et sapiente ducimus dicta reiciendis iusto ab numquam, magnam quidem
-        laudantium animi voluptate amet, inventore quas! Assumenda maxime ipsa
-        placeat, ad autem porro eaque voluptatum sed officiis aperiam quibusdam
-        impedit iusto! Accusantium rerum tempora delectus eos enim, dolorum
-        quibusdam ab asperiores expedita ratione autem temporibus? Quod neque ea
-        alias, tenetur vitae assumenda, accusamus explicabo soluta quas at
-        cupiditate nobis distinctio possimus culpa id fugiat. Sapiente doloribus
-        delectus ullam veritatis, quas assumenda? Assumenda libero repudiandae
-        quidem itaque pariatur illum. Officiis itaque illo nisi et accusantium,
-        exercitationem quaerat amet ea aperiam omnis in quas vel voluptatem,
-        nobis est blanditiis eligendi excepturi obcaecati quia inventore. Nobis
-        explicabo dicta, enim molestiae impedit doloribus distinctio, quia sunt
-        dolorem tempore qui animi natus provident mollitia nisi hic quam,
-        maiores laboriosam ad. Similique earum ipsa facilis dignissimos quisquam
-        quae reprehenderit eum rerum veniam id temporibus magnam aliquid
-        mollitia nisi ut asperiores provident minus impedit magni ea maiores,
-        autem tenetur? Aperiam eligendi est asperiores necessitatibus iusto
-        corporis optio, libero unde aspernatur fuga illo quasi temporibus totam
-        molestiae voluptate odio nobis voluptatum non dolores, eos magni.
-        Placeat voluptas mollitia debitis quasi, culpa eum ad quod blanditiis
-        repellendus aspernatur reiciendis id?
-      </h1>
+    <div
+      className={`${
+        adminSideBar ? "width-adjust " : "w-full  "
+      } mt-15 pt-20  bg-light-bgHeavy `}
+    >
+      <div className="flex flex-col max-w-7xl   w-full mx-auto ">
+        <h1 className="font-bold text-light-textPrimary  text-xl mb-5">
+          Dahsboard Overview
+        </h1>
+        <div className="flex w-full flex-col ">
+          <div className="flex flex-wrap  w-full gap-y-3 justify-between ">
+            {stats.map((stat, index) => (
+              <div key={index} className="flex w-full md:w-[49%] lg:w-[24%]">
+                <div
+                  style={{ background: stat.bg }}
+                  className={`flex py-6 px-4 flex-col justify-center items-center rounded-lg  w-full `}
+                >
+                  {stat.icon}
+                  <h5 className="text-white text-base font-semibold mt-3 ">
+                    {stat.title}
+                  </h5>
+                  <p className="text-white text-xl font-extrabold mt-3 ">
+                    {NairaFormatter.format(stat.amount)}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex mt-10  flex-wrap   justify-between">
+            {statsm.map((stat, index) => (
+              <div
+                key={index}
+                className="flex border  w-full md:w-[49%] lg:w-[24%] py-6 bg-light-bgMid rounded-lg px-4"
+              >
+                <span className="flex w-10  h-10 text-black text-2xl p-2 rounded-full bg-red-100">
+                  {stat.icon}
+                </span>
+                <span>
+                  <p>{stat.title}</p>
+                  <p>{stat.count}</p>
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
