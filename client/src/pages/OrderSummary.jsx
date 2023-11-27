@@ -65,7 +65,7 @@ const OrderSummary = () => {
       navigate(`/tracking/${res._id}`);
 
       setTimeout(() => {
-        // dispatch(clearCartItems());
+        dispatch(clearCartItems());
       }, 200);
     } catch (error) {
       toast.error(error);
