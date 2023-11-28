@@ -15,10 +15,14 @@ import Product from "./pages/Product.jsx";
 import OrderSummary from "./pages/OrderSummary.jsx";
 import TrackOrder from "./pages/TrackOrder.jsx";
 import Products from "./pages/Products.jsx";
+import { Products as ProductList } from "./admin/pages/Products.jsx";
 import store from "../store.js";
 import { Provider } from "react-redux";
 import Dashboard from "./admin/pages/Dashboard.jsx";
 import Orders from "./admin/pages/Orders.jsx";
+import Customers from "./admin/pages/Customers.jsx";
+import Settings from "./admin/pages/Settings.jsx";
+import Categories from "./admin/pages/Categories.jsx";
 import AdminRoute from "./admin/components/AdminRoute.jsx";
 import ShoppingCart from "./pages/ShoppingCart.jsx";
 import Login from "./pages/Login.jsx";
@@ -44,7 +48,10 @@ const router = createBrowserRouter(
       <Route path="/admin" element={<AdminRoute />}>
         <Route index exact element={<Dashboard />} />
         <Route path="/admin/orders" exact element={<Orders />} />
-        <Route path="/admin/products" exact element={<Orders />} />
+        <Route path="/admin/products" exact element={<ProductList />} />
+        <Route path="/admin/customers" exact element={<Customers />} />
+        <Route path="/admin/categories" exact element={<Categories />} />
+        <Route path="/admin/settings" exact element={<Settings />} />
       </Route>
     </Route>
   )

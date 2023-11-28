@@ -19,16 +19,24 @@ const SideBar = () => {
       setAdminSideBar(false);
     }
   }, []);
+
   const normLink =
     "flex pl-4 no-underline gap-x-3  py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear ";
   const activeLink =
     "flex pl-4 no-underline gap-x-3  py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear nav_active ";
   const { adminSideBar, setAdminSideBar } = useContext(AppStateContext);
-  const [path, setPath] = useState("");
-  useEffect(() => {
-    setPath(window.location.pathname);
-  }, [path]);
-
+  const [path, setPath] = useState("home");
+  // useEffect(() => {
+  //   setPath(window.location.pathname);
+  //   console.log("first");
+  // }, [window.location.pathname]);
+  console.log(path);
+  const setUrl = (paths) => {
+    if (!Array.isArray(paths)) {
+      setPath(paths);
+    }
+    console.log(path);
+  };
   const content = [
     {
       icon: (
@@ -69,8 +77,11 @@ const SideBar = () => {
         </Link>
         <div className="flex flex-col w-full  gap-y-5 pt-4">
           <NavLink
+            onClick={() => setUrl("home")}
             to="/admin"
-            className={({ isActive }) => (isActive ? activeLink : normLink)}
+            className={` flex pl-4 no-underline gap-x-3  py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear ${
+              path === "home" && "nav_active"
+            } `}
           >
             <ApplicationMenu
               theme="outline"
@@ -84,9 +95,8 @@ const SideBar = () => {
             {content.map((item, index) => (
               <li key={index} className="flex flex-col ">
                 <NavLink
-                  to=""
-                  className={`flex  no-underline gap-x-3 pl-4  py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear ${
-                    item.to.includes(path) ? "nav_active" : ""
+                  className={`flex  no-underline gap-x-3 pl-4  py-2 text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear  ${
+                    path === "catalog" && "nav_active"
                   }`}
                 >
                   {item.icon}
@@ -94,9 +104,10 @@ const SideBar = () => {
                 </NavLink>
                 <ul className=" pl-10 mt-3 gap-y-3 flex flex-col ">
                   {item.content &&
-                    item.content.map((item, index) => (
+                    item?.content?.map((item, index) => (
                       <li className="" key={index}>
                         <NavLink
+                          onClick={() => setUrl("catalog")}
                           className="no-underline  text-[#555962] font-normal hover:text-[#10B981] transition-all ease-linear"
                           to={item.to}
                         >
@@ -109,8 +120,11 @@ const SideBar = () => {
             ))}
           </MetisMenu>
           <NavLink
-            to="/admin"
-            className="flex pl-4 no-underline gap-x-3  text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear"
+            to="/admin/customers"
+            onClick={() => setUrl("/admin/customers")}
+            className={`flex  no-underline gap-x-3 pl-4 py-2  text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear  ${
+              path == "/admin/customers" && "nav_active"
+            }`}
           >
             <Peoples
               theme="outline"
@@ -121,8 +135,11 @@ const SideBar = () => {
             <span>Customers</span>
           </NavLink>
           <NavLink
+            onClick={() => setUrl("/admin/orders")}
             to="/admin/orders"
-            className={({ isActive }) => (isActive ? activeLink : normLink)}
+            className={`flex  no-underline gap-x-3 pl-4 py-2  text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear  ${
+              path == "/admin/orders" && "nav_active"
+            }`}
           >
             <ListCheckbox
               theme="outline"
@@ -133,8 +150,11 @@ const SideBar = () => {
             <span>Orders</span>
           </NavLink>
           <NavLink
-            to="/admin"
-            className="flex pl-4 no-underline gap-x-3   text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear"
+            to="/admin/settings"
+            onClick={() => setUrl("/admin/settings")}
+            className={`flex  no-underline gap-x-3 pl-4 py-2  text-[#555962] font-semibold hover:text-[#10B981] transition-all ease-linear  ${
+              path == "/admin/settings" && "nav_active"
+            }`}
           >
             <FolderSettings
               theme="outline"
