@@ -73,7 +73,7 @@ const Dashboard = () => {
     <div
       className={`${
         adminSideBar ? "width-adjust " : "w-full  "
-      } mt-15 pt-20  bg-light-bgHeavy `}
+      } mt-15 pt-20  bg-light-bgHeavy px-4`}
     >
       <div className="flex flex-col max-w-7xl   w-full mx-auto ">
         <h1 className="font-bold text-light-textPrimary  text-xl mb-5">

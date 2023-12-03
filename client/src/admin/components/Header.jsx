@@ -25,7 +25,7 @@ const Header = () => {
         </div>
         <div className="flex justify-center items-center">
           <ul className=" flex justify-center items-center gap-x-6 my-auto  ">
-            <Dropdown as="li" className="nav-item dropdown my-auto flex ">
+            {/* <Dropdown as="li" className="nav-item dropdown my-auto flex ">
               <Dropdown.Toggle
                 className=" flex justify-center flex-col  flex-wrap cursor-pointer h-[32px] w-[32px]"
                 variant=""
@@ -42,7 +42,7 @@ const Header = () => {
                 </span>
                 {/* <span className="flex justify-center h-5 w-5 text-xs items-center absolute light top-[-3px] left-[-10px] text-white bg-green-700 rounded-circle">
                   4
-                </span> */}
+                </span> 
               </Dropdown.Toggle>
               <Dropdown.Menu
                 style={{
@@ -82,7 +82,7 @@ const Header = () => {
                   </li>
                 </ul>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
 
             <Dropdown
               as="li"
@@ -107,6 +107,7 @@ const Header = () => {
                 style={{
                   border: "none",
                   position: "absolute",
+                  background: "white",
                   inset: "unset",
                   transform: "translate3d(0px, 84px, 0px)",
                 }}
