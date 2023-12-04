@@ -3,10 +3,24 @@ import Herosection from "../components/Herosection";
 import Loader from "../components/Loader";
 import ProductSection from "../components/ProductSection";
 import SubHero from "../components/SubHero";
+import axios from "axios";
 import { useGetProductsQuery } from "../slices/productsApiSlice.js";
 
 const HomePage = () => {
   const { data: products, isLoading, error } = useGetProductsQuery();
+
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/auth/google/callback"
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  handleGoogleLogin();
 
   return (
     <div className=" ">
