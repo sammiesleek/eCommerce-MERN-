@@ -1,5 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import session from "express-session";
+import passport from "passport";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
@@ -14,6 +16,20 @@ const app = express();
 // body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// sessions
+
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // cookie parser
 app.use(cookieParser());
