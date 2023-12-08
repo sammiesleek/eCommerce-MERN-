@@ -23,8 +23,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    googleAuth: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/auth/google`,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation } =
-  usersApiSlice;
+export const {
+  useLoginMutation,
+  useGoogleAuthQuery,
+  useLogoutMutation,
+  useRegisterMutation,
+} = usersApiSlice;

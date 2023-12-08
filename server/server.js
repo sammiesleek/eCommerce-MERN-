@@ -7,6 +7,7 @@ import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 dotenv.config();
 const port = 5000;
@@ -39,6 +40,7 @@ app.get("/api", (req, res) => {
 });
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
 app.get("/api/config/paystack", (req, res) =>
   res.status(200).send({ clientId: process.env.REACT_APP_PAYSTAC_KEY })

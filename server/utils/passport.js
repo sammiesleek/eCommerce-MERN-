@@ -16,7 +16,7 @@ passport.use(
     {
       clientID:
         "428237007011-i5tjsbbfmr5va8uqrc6o0dth36dg19dl.apps.googleusercontent.com",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientSecret: "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",
       callbackURL: "/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {

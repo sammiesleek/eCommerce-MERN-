@@ -13,13 +13,7 @@ import {
   deleteUser,
   updateUser,
 } from "../controllers/userController.js";
-import passport from "../utils/passport.js";
 
-router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-// router.get("/auth/google/callback", );
 router.route("/").post(registerUser).get(protect, adminProtect, getUsers);
 router.post("/logout", logoutUser);
 router.post("/auth", authUser);
