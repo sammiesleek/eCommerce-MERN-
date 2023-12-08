@@ -12,7 +12,7 @@ router.get(
     failureRedirect: "/",
   }),
   (req, res) => {
-    res.redirect("/admin");
+    generateTokens(res, req.user._id);
   }
 );
 export default router;

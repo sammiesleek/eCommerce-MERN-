@@ -12,6 +12,10 @@ const Register = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const handleGoogleLogin = async () => {
+    window.location.href = "http://localhost:5000/auth/google";
+  };
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -86,10 +90,10 @@ const Register = () => {
       <div className="flex flex-col  w-[400px] max-w-[500px] bg-white m-auto py-4 px-6 relative z-10">
         <h4 className="text-center text-3xl font-semibold my-5">Register</h4>
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col mt-10 gap-y-10">
+          <div className="flex flex-col mt-10 gap-y-4">
             <div className="flex w-full">
               <input
-                className="border-b focus:outline-none focus:border-b-black w-full py-1 px-2 font-normal text-base"
+                className="border-b focus:outline-none focus:border-b-black w-full py-3 px-2 font-normal text-base"
                 placeholder="First Name"
                 type="text"
                 value={formData.firstName}
@@ -99,7 +103,7 @@ const Register = () => {
             </div>
             <div className="flex w-full">
               <input
-                className="border-b focus:outline-none focus:border-b-black w-full py-1 px-2 font-normal text-base"
+                className="border-b focus:outline-none focus:border-b-black w-full py-3 px-2 font-normal text-base"
                 placeholder="Last Name"
                 type="text"
                 value={formData.lastName}
@@ -109,7 +113,7 @@ const Register = () => {
             </div>
             <div className="flex w-full">
               <input
-                className="border-b focus:outline-none focus:border-b-black w-full py-1 px-2 font-normal text-base"
+                className="border-b focus:outline-none focus:border-b-black w-full py-3 px-2 font-normal text-base"
                 placeholder="Email Address"
                 // type="email"
                 value={formData.email}
@@ -119,7 +123,7 @@ const Register = () => {
             </div>
             <div className="flex w-full">
               <input
-                className="border-b focus:outline-none focus:border-b-black w-full py-1 px-2 font-normal text-base"
+                className="border-b focus:outline-none focus:border-b-black w-full py-3 px-2 font-normal text-base"
                 placeholder="Phone Number"
                 type="tel"
                 value={formData.phone}
@@ -129,7 +133,7 @@ const Register = () => {
             </div>
             <div className="flex w-full">
               <input
-                className="border-b focus:outline-none focus:border-b-black w-full py-1 px-2 font-normal text-base"
+                className="border-b focus:outline-none focus:border-b-black w-full py-3 px-2 font-normal text-base"
                 placeholder="Address"
                 type="tel"
                 value={formData.address}
@@ -139,7 +143,7 @@ const Register = () => {
             </div>
             <div className="flex w-full">
               <input
-                className="border-b focus:outline-none focus:border-b-black w-full py-1 px-2 font-normal text-base"
+                className="border-b focus:outline-none focus:border-b-black w-full py-3 px-2 font-normal text-base"
                 placeholder="Password"
                 type="password"
                 value={formData.password}
@@ -149,7 +153,7 @@ const Register = () => {
             </div>
             <div className="flex w-full">
               <input
-                className="border-b focus:outline-none focus:border-b-black w-full py-1 px-2 font-normal text-base"
+                className="border-b focus:outline-none focus:border-b-black w-full py-3 px-2 font-normal text-base"
                 placeholder=" Confirm Password"
                 type="password"
                 value={formData.passwordCheck}
@@ -177,6 +181,13 @@ const Register = () => {
             </Link>
           </div>
         </form>
+        <button
+          className=" flex px-4 py-2 border items-center justify-center mt-5 gap-x-4 w-fit mx-auto"
+          onClick={() => handleGoogleLogin()}
+        >
+          <img className="h-5 w-5" src="/images/icons/google.png" alt="" />{" "}
+          Register with Google
+        </button>
       </div>
     </div>
   );

@@ -8,7 +8,17 @@ import { setCredentials } from "../slices/authSlice";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 import { StatusAlertService } from "react-status-alert";
+import { Google } from "@icon-park/react";
 const Login = () => {
+  const handleGoogleLogin = async () => {
+    fetch("http://localhost:5000/auth/google/callback")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.error("Error:", error));
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -63,10 +73,10 @@ const Login = () => {
       <div className="flex flex-col h-[500px] w-[400px] max-w-[500px] bg-white m-auto py-4 px-6 relative z-10">
         <h4 className="text-center text-3xl font-semibold my-5">Login</h4>
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col mt-10 gap-y-10">
+          <div className="flex flex-col mt-10 gap-y-5">
             <div className="flex w-full">
               <input
-                className="border-b focus:outline-none focus:border-b-black w-full py-1 px-2 font-normal text-base"
+                className="border-b focus:outline-none focus:border-b-black w-full py-4 px-2 font-normal text-base"
                 placeholder="Email Address"
                 type="text"
                 value={formData.email}
@@ -76,7 +86,7 @@ const Login = () => {
             </div>
             <div className="flex w-full">
               <input
-                className="border-b focus:outline-none focus:border-b-black w-full py-1 px-2 font-normal text-base"
+                className="border-b focus:outline-none focus:border-b-black w-full py-4 px-2 font-normal text-base"
                 placeholder="Password"
                 type="password"
                 value={formData.password}
@@ -85,7 +95,7 @@ const Login = () => {
               />
             </div>
           </div>
-          <div className="flex justify-center items-center mt-20 flex-col">
+          <div className="flex justify-center items-center mt-10 flex-col">
             <button
               onClick={() => handleSubmit()}
               style={{
@@ -110,6 +120,13 @@ const Login = () => {
             </span>
           </div>
         </form>
+        <button
+          className=" flex px-4 py-2 border items-center justify-center mt-5 gap-x-4 w-fit mx-auto"
+          onClick={() => handleGoogleLogin()}
+        >
+          <img className="h-5 w-5" src="/images/icons/google.png" alt="" />{" "}
+          Login with Google
+        </button>
       </div>
     </div>
   );

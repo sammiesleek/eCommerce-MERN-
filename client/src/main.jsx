@@ -28,6 +28,7 @@ import ShoppingCart from "./pages/ShoppingCart.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
+import Profile from "./pages/Profile.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
         <Route path="/register" exact element={<Login />} />
         <Route path="" element={<PrivateRoute />}>
           <Route path="/shipping" exact element={<OrderSummary />} />
+          <Route path="/profile" exact element={<Profile />} />
           <Route path="/tracking/:id" exact element={<TrackOrder />} />
         </Route>
       </Route>
