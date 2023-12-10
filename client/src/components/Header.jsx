@@ -120,7 +120,10 @@ const Header = () => {
                       </Link>
                     )}
                     {userInfo && (
-                      <Link className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer">
+                      <Link
+                        to="/profile"
+                        className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
+                      >
                         Profile
                       </Link>
                     )}
@@ -230,7 +233,10 @@ const Header = () => {
                   </Link>
                 )}
                 {userInfo && (
-                  <Link className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer">
+                  <Link
+                    to="/profile"
+                    className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
+                  >
                     Profile
                   </Link>
                 )}

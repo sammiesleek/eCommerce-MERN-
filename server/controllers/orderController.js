@@ -106,7 +106,8 @@ export const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @access private
 
 export const gettAllOrders = asyncHandler(async (req, res) => {
-  res.send("get all orders");
+  const orders = await Order.find({}).populate("user", "id firstName email");
+  res.status(200).json(orders);
 });
 
 export const confirmPayment = asyncHandler(async (req, res) => {

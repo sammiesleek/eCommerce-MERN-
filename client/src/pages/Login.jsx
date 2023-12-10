@@ -8,7 +8,6 @@ import { setCredentials } from "../slices/authSlice";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 import { StatusAlertService } from "react-status-alert";
-import { Google } from "@icon-park/react";
 const Login = () => {
   const handleGoogleLogin = async () => {
     fetch("http://localhost:5000/auth/google/callback")

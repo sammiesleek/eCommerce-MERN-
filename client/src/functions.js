@@ -35,3 +35,13 @@ export const makePayment = (
   });
   handler.openIframe();
 };
+
+import { format } from "date-fns";
+
+export const formatDate = (date) => {
+  const newDate = new Date(date);
+
+  const formattedDate = format(newDate, "yyyy-MM-dd HH:mm:ss");
+
+  return formattedDate;
+};

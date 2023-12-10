@@ -2,15 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import { NairaFormatter } from "../../utils/cartUtils";
 import { AppStateContext } from "../../ContextApi/AppStateContext";
 import { Avatar, Close, Delete, Editor } from "@icon-park/react";
+import { formatDate } from "../../functions";
 import products from "../../data/products";
 import Pagination from "../../components/Pagination";
-
+import { useGetOrdersQuery } from "../../slices/ordersApiSlice";
+import Loader from "../../components/Loader";
 const Orders = () => {
   const { adminSideBar } = useContext(AppStateContext);
   const [checkBoxes, setCheckBoxes] = useState(undefined);
   const [mainCheck, setMainCheck] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 3;
+  const perPage = 15;
   const [filteredProduct, setFilteredProduct] = useState(products);
   const [addProduct, setAddProduct] = useState(false);
   const [editProduct, setEditProduct] = useState(false);
@@ -19,374 +21,32 @@ const Orders = () => {
   const indexOfFirstData = indexOfLastData - perPage;
 
   const paginate = (number) => {
-    let page = filteredProduct.length / perPage;
+    let page = orders?.length / perPage;
     console.log(page);
     if (number > 0 && number <= page) {
       setCurrentPage(number);
     }
   };
-  {
-    /* <input type="file" accept="image/*"  onchange="showMyImage(this)" />
- <br/>
-<img id="thumbnil" style="width:20%; margin-top:10px;"  src="" alt="image"/> */
+
+  const { data: orders, isLoading, error } = useGetOrdersQuery();
+  console.log(orders);
+  console.log(error);
+  if (isLoading) {
+    return <Loader size="50" />;
   }
-
-  function showMyImage(fileInput) {
-    var files = fileInput.files;
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i];
-      var imageType = /image.*/;
-      if (!file.type.match(imageType)) {
-        continue;
-      }
-      var img = document.getElementById("thumbnil");
-      img.file = file;
-      var reader = new FileReader();
-      reader.onload = (function (aImg) {
-        return function (e) {
-          aImg.src = e.target.result;
-        };
-      })(img);
-      reader.readAsDataURL(file);
-    }
+  if (error) {
+    return <div className="flex mt-20">erorr</div>;
   }
-
-  useEffect(() => {
-    setCheckBoxes(document.querySelectorAll(".table-item input"));
-    setMainCheck(document.querySelector(".table-cont input"));
-  }, [filteredProduct]);
-
-  const checkbox = (type) => {
-    for (let i = 0; i < checkBoxes.length; i++) {
-      const element = checkBoxes[i];
-      if (type === "all") {
-        if (mainCheck.checked) {
-          element.checked = true;
-        } else {
-          element.checked = false;
-        }
-      } else {
-        if (!element.checked) {
-          mainCheck.checked = false;
-          break;
-        } else {
-          mainCheck.checked = true;
-        }
-      }
-    }
-  };
-
-  const batchDelete = () => {
-    if (mainCheck.checked === true) {
-      setFilteredProduct([]);
-    } else {
-      const deleteIds = [];
-      checkBoxes.forEach((box) => {
-        if (box.checked === true) {
-          deleteIds.push(box.getAttribute("id"));
-        }
-      });
-
-      const res = filteredProduct.filter((x) => !deleteIds.includes(x._id));
-      setFilteredProduct(res);
-      checkBoxes.forEach((x) => {
-        x.checked = false;
-      });
-    }
-    mainCheck.checked = false;
-    setCurrentPage(0);
-  };
-
-  const deleteProduct = (id) => {
-    const res = filteredProduct.filter((x) => x._id !== id);
-    setFilteredProduct(res);
-  };
   return (
     <div
       className={`${
         adminSideBar ? "width-adjust " : "w-full  "
       } mt-10 pt-10  bg-light-bgHeavy px-2`}
     >
-      {/* add product modal starts here  */}
-      <div
-        className={`flex flex-col product_modal fixed top-0 ${
-          addProduct ? "right-0" : "right-[-200%]"
-        }  h-screen shadow-2xl bg-light-bgMid  w-full md:w-80% lg:w-[800px] z-50 transition-all ease-in-out `}
-      >
-        <div className="flex bg-light-bgHeavy  w-full justify-between p-5 h-fit">
-          <span className="flex flex-col">
-            <p className="font-semibold text-xl text-light-textPrimary">
-              Add Product
-            </p>
-            <p className="font-normal text-sm text-light-textPrimary">
-              Add Product and neccessary informations here
-            </p>
-          </span>
-          <span
-            onClick={() => setAddProduct(false)}
-            className="flex rounded-full bg-white h-10 justify-center items-center w-10 shadow-sm hover:rotate-[180deg] transition-all ease-linear"
-          >
-            <Close
-              className="cursor-pointer text-light-textPrimary"
-              theme="outline"
-              size="20"
-              strokeWidth={7}
-            />
-          </span>
-        </div>
-        <div className="flex w-full h-full overflow-x-scroll pt-5">
-          <div className="flex w-full px-5">
-            <form action="" className="flex flex-col w-full gap-y-5">
-              <div className="flex w-full  ">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  Product&apos;s Name
-                </p>
-                <input
-                  className="w-[70%] ml-auto   rounded-md border-gray-500 border py-3 focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
-                  type="text"
-                  placeholder="Product's Name/ Title"
-                />
-              </div>
-              <div className="flex w-full ">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  {" "}
-                  Product&apos;s Category
-                </p>
-                <select className="bg-[#f2f4f6] block  w-[70%] ml-auto  px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-md  focus:ring-transparent focus:border-[#1FA076]">
-                  <option
-                    className="active:bg-green-700 flex hover:bg-red-900 hover:text-red-300"
-                    selected
-                  >
-                    Category
-                  </option>
-                  <option value="US">United States</option>
-                  <option value="CA">Canada</option>
-                  <option value="FR">France</option>
-                  <option value="DE">Germany</option>
-                </select>
-              </div>
-
-              <div className="flex">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  Product&apos;s Price
-                </p>
-                <input
-                  className="w-[70%] ml-auto  rounded-md  py-3 border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
-                  type="text"
-                  placeholder="Product's Price"
-                />
-              </div>
-              <div className="flex">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  {" "}
-                  Product&apos;s Quantity
-                </p>
-                <input
-                  className="w-[70%] ml-auto py-3   rounded-md border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
-                  type="text"
-                  placeholder="Product's Count"
-                />
-              </div>
-              <div className="flex">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  {" "}
-                  Product&apos;s Description
-                </p>
-                <textarea
-                  className="w-[70%] ml-auto p-4  rounded-md  border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
-                  placeholder="Product Description"
-                  rows={5}
-                />
-              </div>
-
-              <div className="flex items-center justify-center w-full relative">
-                <label
-                  htmlFor="dropzone-file"
-                  className="flex flex-col items-center justify-center w-full h-56 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50   hover:bg-gray-100 "
-                >
-                  <div className="flex flex-col items-center   justify-center pt-2 pb-6">
-                    <svg
-                      className="w-8 h-8 mb-4 text-gray-500 "
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg>
-                    <p className="mb-2 text-sm text-gray-500">
-                      <span className="font-semibold">Click to upload</span> or
-                      drag and drop
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      SVG, PNG, JPG or GIF (MAX. 800x400px)
-                    </p>
-                  </div>
-                  <input
-                    type="file"
-                    className="absolute flex w-full h-full opacity-0"
-                  />
-                </label>
-              </div>
-              <div className="flex justify-end">
-                <input
-                  className="bg-[#1FA076] px-10 py-3 font-bold text-lg  text-white rounded-sm cursor-pointer hover:bg-gray-800"
-                  type="button"
-                  value="Submit"
-                />
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      {/* edit modal  */}
-      <div
-        className={`flex flex-col product_modal fixed top-0 ${
-          editProduct ? "right-0" : "right-[-200%]"
-        }  h-screen shadow-2xl bg-light-bgMid  w-full md:w-80% lg:w-[800px] z-50 transition-all ease-in-out `}
-      >
-        <div className="flex bg-light-bgHeavy  w-full justify-between p-5 h-fit">
-          <span className="flex flex-col">
-            <p className="font-semibold text-xl text-light-textPrimary">
-              Add Product
-            </p>
-            <p className="font-normal text-sm text-light-textPrimary">
-              Add Product and neccessary informations here
-            </p>
-          </span>
-          <span
-            onClick={() => setEditProduct(false)}
-            className="flex rounded-full bg-white h-10 justify-center items-center w-10 shadow-sm hover:rotate-[180deg] transition-all ease-linear"
-          >
-            <Close
-              className="cursor-pointer text-light-textPrimary"
-              theme="outline"
-              size="20"
-              strokeWidth={7}
-            />
-          </span>
-        </div>
-        <div className="flex w-full h-full overflow-x-scroll pt-5">
-          <div className="flex w-full px-5">
-            <form action="" className="flex flex-col w-full gap-y-5">
-              <div className="flex w-full  ">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  Product&apos;s Name
-                </p>
-                <input
-                  className="w-[70%] ml-auto   rounded-md border-gray-500 border py-3 focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
-                  type="text"
-                  placeholder="Product's Name/ Title"
-                />
-              </div>
-              <div className="flex w-full ">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  {" "}
-                  Product&apos;s Category
-                </p>
-                <select className="bg-[#f2f4f6] block  w-[70%] ml-auto  px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-md  focus:ring-transparent focus:border-[#1FA076]">
-                  <option
-                    className="active:bg-green-700 flex hover:bg-red-900 hover:text-red-300"
-                    selected
-                  >
-                    Category
-                  </option>
-                  <option value="US">United States</option>
-                  <option value="CA">Canada</option>
-                  <option value="FR">France</option>
-                  <option value="DE">Germany</option>
-                </select>
-              </div>
-
-              <div className="flex">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  Product&apos;s Price
-                </p>
-                <input
-                  className="w-[70%] ml-auto  rounded-md  py-3 border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
-                  type="text"
-                  placeholder="Product's Price"
-                />
-              </div>
-              <div className="flex">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  {" "}
-                  Product&apos;s Quantity
-                </p>
-                <input
-                  className="w-[70%] ml-auto py-3   rounded-md border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
-                  type="text"
-                  placeholder="Product's Count"
-                />
-              </div>
-              <div className="flex">
-                <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
-                  {" "}
-                  Product&apos;s Description
-                </p>
-                <textarea
-                  className="w-[70%] ml-auto p-4  rounded-md  border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
-                  placeholder="Product Description"
-                  rows={5}
-                />
-              </div>
-
-              <div className="flex items-center justify-center w-full relative">
-                <label
-                  htmlFor="dropzone-file"
-                  className="flex flex-col items-center justify-center w-full h-56 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50   hover:bg-gray-100 "
-                >
-                  <div className="flex flex-col items-center   justify-center pt-2 pb-6">
-                    <svg
-                      className="w-8 h-8 mb-4 text-gray-500 "
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg>
-                    <p className="mb-2 text-sm text-gray-500">
-                      <span className="font-semibold">Click to upload</span> or
-                      drag and drop
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      SVG, PNG, JPG or GIF (MAX. 800x400px)
-                    </p>
-                  </div>
-                  <input
-                    type="file"
-                    className="absolute flex w-full h-full opacity-0"
-                  />
-                </label>
-              </div>
-              <div className="flex justify-end">
-                <input
-                  className="bg-[#1FA076] px-10 py-3 font-bold text-lg  text-white rounded-sm cursor-pointer hover:bg-gray-800"
-                  type="button"
-                  value="Update"
-                />
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
       <div className="flex flex-col w-full max-w-7xl  mx-auto pb-20">
         <div className="flex">
           <p className="font-bold text-light-textPrimary  text-xl mb-5">
-            Products
+            Orders
           </p>
         </div>
         <div className="p-3 bg-light-bgMid mb-5 items-center justify-between flex-column flex-wrap md:flex-row space-y-4  flex ">
@@ -464,19 +124,6 @@ const Orders = () => {
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 bg-light-bgMid rounded border">
             <thead className="text-xs rounded-lg text-gray-700 uppercase bg-[#F2F4F6]  ">
               <tr className="">
-                <th scope="col" className="p-4">
-                  <div className="flex items-center table-cont">
-                    <input
-                      onClick={() => checkbox("all")}
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="input w-[15px] h-[15px]   border-[#1FA076] rounded-sm checked:bg-[#1FA076] focus:ring-transparent cursor-pointer "
-                    />
-                    <label htmlFor="checkbox-all-search" className="sr-only">
-                      checkbox
-                    </label>
-                  </div>
-                </th>
                 <th scope="col" className="px-6 py-3">
                   INVOICE NO
                 </th>
@@ -504,38 +151,26 @@ const Orders = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredProduct
+              {orders
                 ?.slice(indexOfFirstData, indexOfLastData)
-                .map((product, index) => (
+                .map((order, index) => (
                   <tr
                     key={index}
                     className="bg-white  border-b   hover:bg-gray-50 "
                   >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center table-item">
-                        <input
-                          id={product._id}
-                          type="checkbox"
-                          className="input w-[15px] h-[15px]  border-[#1FA076] rounded-sm checked:bg-[#1FA076] focus:ring-transparent  cursor-pointer "
-                          onClick={() => checkbox()}
-                        />
-                        <label
-                          htmlFor="checkbox-table-search-1"
-                          className="sr-only"
-                        ></label>
-                      </div>
-                    </td>
                     <th
                       scope="row"
                       className=" px-6 py-4 text-gray-900 whitespace-nowrap  "
                     >
                       UUEYEW7477
                     </th>
-                    <td className="px-6 py-4">React Developer</td>
-                    <td className="px-6 py-4">SAMMY AJAYI</td>
-                    <td className="px-6 py-4">{product.countInStock}</td>
+                    <td className="px-6 py-4">{formatDate(order.createdAt)}</td>
                     <td className="px-6 py-4">
-                      {NairaFormatter.format(product.price)}
+                      {order.user.lastName + " " + order.user.firstName}
+                    </td>
+                    <td className="px-6 py-4">{order.countInStock}</td>
+                    <td className="px-6 py-4">
+                      {NairaFormatter.format(order.totalPrice)}
                     </td>
                     <td className="px-6 py-4">Pending</td>
                     <td className="px-6 py-4">
@@ -557,14 +192,12 @@ const Orders = () => {
                           size="20"
                           fill="#333"
                           strokeWidth={3}
-                          onClick={() => setEditProduct(true)}
                         />
                         <Delete
                           className="text-red-600 cursor-pointer"
                           theme="outline"
                           size="20"
                           strokeWidth={3}
-                          onClick={() => deleteProduct(product._id)}
                         />
                       </span>
                     </td>
@@ -575,78 +208,11 @@ const Orders = () => {
           {
             <Pagination
               perPage={perPage}
-              totalData={filteredProduct.length}
+              totalData={orders?.length}
               paginate={paginate}
               currentPage={currentPage}
             />
           }
-          <div
-            id="deletemany-modal"
-            tabIndex="-1"
-            className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
-          >
-            <div className="relative p-4 w-full max-w-md max-h-full">
-              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <button
-                  type="button"
-                  className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-hide="deletemany-modal"
-                >
-                  <svg
-                    className="w-3 h-3"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 14 14"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                    />
-                  </svg>
-                  <span className="sr-only">Close modal</span>
-                </button>
-                <div className="p-4 md:p-5 text-center">
-                  <svg
-                    className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>
-                  <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                    Are you sure you want to delete this product?
-                  </h3>
-                  <button
-                    data-modal-hide="deletemany-modal"
-                    onClick={() => batchDelete()}
-                    type="button"
-                    className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2"
-                  >
-                    Yes, Im sure
-                  </button>
-                  <button
-                    data-modal-hide="deletemany-modal"
-                    type="button"
-                    className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                  >
-                    No, cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
