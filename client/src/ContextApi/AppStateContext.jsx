@@ -12,6 +12,8 @@ export const ContextProvider = ({ children }) => {
   const [severity, setSeverity] = useState("info");
   const [isError, setIsError] = useState(false);
   const [qty, setQty] = useState(1);
+  const [addProduct, setAddProduct] = useState(false);
+  const [editProduct, setEditProduct] = useState(false);
   return (
     <AppStateContext.Provider
       value={{
@@ -31,6 +33,10 @@ export const ContextProvider = ({ children }) => {
         setAdminSideBar,
         qty,
         setQty,
+        addProduct,
+        setAddProduct,
+        editProduct,
+        setEditProduct,
       }}
     >
       {children}

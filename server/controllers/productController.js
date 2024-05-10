@@ -4,6 +4,20 @@ import Product from "../models/productModel.js";
 // @fetch all product
 // @route GET /api/products
 // @access public
+export const createProduct = asyncHandler(async (req, res) => {
+  const product = new product({
+    name: "sample project",
+    price: "0",
+    user: req.user._id,
+    image: "/images/sample.jpeg",
+    brand: "sample brand",
+    category: "sample category",
+    countStock: 0,
+    numReviews: 0,
+    description: "sample desc",
+  });
+});
+
 export const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({});
   res.status(200);

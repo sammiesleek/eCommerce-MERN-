@@ -98,20 +98,28 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
-    (user.name = req.body.name || user.name),
-      (user.email = req.body.email || user.email);
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
+    user.email = req.body.email || user.email;
     user.phone = req.body.phone || user.phone;
     user.address = req.body.address || user.address;
 
-    if (req.body.password) {
-      user.password = req.body.password;
+    if (req.body.oldPass && req.body.newPass) {
+      if (await user.matchPassword(req.body.oldPass)) {
+        user.password = req.body.newPass;
+      } else {
+        res.status(404);
+        throw new Error("Please enter correct old password");
+      }
     }
 
     const updatedUser = await user.save();
     res.status(200).json({
       _id: updatedUser._d,
-      name: updatedUser.name,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
       email: updatedUser.email,
+      address: updatedUser.address,
     });
   } else {
     res.status(404);
