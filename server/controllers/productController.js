@@ -62,11 +62,15 @@ export const getProductById = asyncHandler(async (req, res) => {
 export const updateProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product) {
-    (product.name = req.body.name), (product.brand = req.body.brand);
-    product.countInStock = req.body.countInStock;
-    product.category = req.body.category;
-    product.price = req.body.price;
-    product.description = req.body.description;
+    (product.name = req.body.name || product.name),
+      (product.brand = req.body.brand || product.brand);
+    product.countInStock = req.body.countInStock || product.countInStock;
+    product.category = req.body.category || product.category;
+    product.price = req.body.price || product.price;
+    product.description = req.body.description || product.description;
+    product.published = req.body.published
+      ? !product.published
+      : product.published;
   } else {
     res.status(404);
     throw new Error("Resource not found");
@@ -78,5 +82,16 @@ export const updateProduct = asyncHandler(async (req, res) => {
   } else {
     res.status(500);
     throw new Error("error  updating product");
+  }
+});
+
+export const deleteProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    await Product.deleteOne({ _id: product._id });
+    res.status(200).json({ message: "Product deleted" });
+  } else {
+    throw new Error("Resource not found");
   }
 });

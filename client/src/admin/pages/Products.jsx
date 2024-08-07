@@ -9,6 +9,8 @@ import EditProduct from "../components/EditProduct";
 import {
   useGetProductsQuery,
   useGetCategoriesQuery,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
 } from "../../slices/productsApiSlice";
 import Loader from "../../components/Loader";
 
@@ -25,9 +27,15 @@ export const Products = () => {
   const [mainCheck, setMainCheck] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 10;
+  const [deleteId, setDeleteId] = useState(undefined);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [filteredProduct, setFilteredProduct] = useState(undefined);
   const indexOfLastData = currentPage * perPage;
   const indexOfFirstData = indexOfLastData - perPage;
+  const [updatePro, { isLoading: isupdating, error: errs }] =
+    useUpdateProductMutation();
+  const [deletePro, { isLoading: isDeleting, error: erross }] =
+    useDeleteProductMutation();
   const {
     addProduct,
     adminSideBar,
@@ -136,15 +144,43 @@ export const Products = () => {
     setCurrentPage(0);
   };
 
-  const deleteProduct = (id) => {
-    const res = filteredProduct.filter((x) => x._id !== id);
-    setFilteredProduct(res);
+  const deleteProduct = async () => {
+    const res = await deletePro(deleteId).unwrap();
+    console.log(res);
+    refetch();
   };
 
   const handleEdit = (id) => {
     const product = products.filter((product) => product._id === id)[0];
     setEditpro(product);
     setEditProduct(true);
+  };
+
+  // update product
+  const updateProduct = async (e, data = undefined) => {
+    if (data) {
+      e.preventDefault();
+      const res = await updatePro(data).unwrap();
+
+      if (res) {
+        setEditProduct(false);
+        refetch();
+      }
+    } else {
+      const data = {
+        id: e.id,
+        published: e.value,
+      };
+      try {
+        const res = await updatePro(data).unwrap();
+
+        if (res) {
+          refetch();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -168,7 +204,11 @@ export const Products = () => {
           className={`flex flex-col product_modal fixed top-0 "right-0" "
           }  h-screen shadow-2xl bg-light-bgMid  w-full md:w-80% lg:w-[800px] z-50 transition-all ease-in-out `}
         >
-          <EditProduct refetch={refetch} product={editPro} />
+          <EditProduct
+            refetch={refetch}
+            product={editPro}
+            updateProduct={updateProduct}
+          />
         </div>
       ) : (
         ""
@@ -267,7 +307,7 @@ export const Products = () => {
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 bg-light-bgMid rounded border">
             <thead className="text-xs rounded-lg text-gray-700 uppercase bg-[#F2F4F6]  ">
               <tr className="">
-                <th scope="col" className="p-4">
+                {/* <th scope="col" className="p-4">
                   <div className="flex items-center table-cont">
                     <input
                       onClick={() => checkbox("all")}
@@ -279,7 +319,7 @@ export const Products = () => {
                       checkbox
                     </label>
                   </div>
-                </th>
+                </th> */}
                 <th scope="col" className="px-6 py-3">
                   PRODUCT NAME
                 </th>
@@ -292,15 +332,13 @@ export const Products = () => {
                 <th scope="col" className="px-6 py-3">
                   iN STOCK
                 </th>
-                <th scope="col" className="px-6 py-3">
-                  STATUS
-                </th>
+
                 <th scope="col" className="px-6 py-3">
                   PUBLISHED
                 </th>
-                <th scope="col" className="px-6 py-3">
+                {/* <th scope="col" className="px-6 py-3">
                   VIEW
-                </th>
+                </th> */}
                 <th scope="col" className="px-6 py-3">
                   ACTIONS
                 </th>
@@ -320,7 +358,7 @@ export const Products = () => {
                       key={index}
                       className="bg-white  border-b   hover:bg-gray-50 "
                     >
-                      <td className="w-4 p-4">
+                      {/* <td className="w-4 p-4">
                         <div className="flex items-center table-item">
                           <input
                             id={product._id}
@@ -333,7 +371,7 @@ export const Products = () => {
                             className="sr-only"
                           ></label>
                         </div>
-                      </td>
+                      </td> */}
                       <th
                         scope="row"
                         className=" px-6 py-4 text-gray-900 whitespace-nowrap  "
@@ -355,23 +393,26 @@ export const Products = () => {
                         {NairaFormatter.format(product.price)}
                       </td>
                       <td className="px-6 py-4">{product.countInStock}</td>
-                      <td className="px-6 py-4">
+                      {/* <td className="px-6 py-4">
                         <div className="flex items-center">
                           <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
                           Online
                         </div>
-                      </td>
+                      </td> */}
                       <td className="px-6 py-4">
                         <label className="relative inline-flex items-center me-5 cursor-pointer">
                           <input
                             type="checkbox"
-                            value=""
+                            checked={product.published}
+                            value={product.published}
+                            id={product._id}
                             className="sr-only peer"
+                            onClick={(e) => updateProduct(e.target)}
                           />
                           <div className="w-11 h-6 bg-red-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-transparent  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-yellow-700 peer-checked:bg-green-900"></div>
                         </label>
                       </td>
-                      <td className="px-6 py-4"> VIEW</td>
+                      {/* <td className="px-6 py-4"> VIEW</td> */}
                       <td className="px-6 py-4">
                         <span className="flex gap-x-3 ">
                           <span className="relative">
@@ -399,13 +440,21 @@ export const Products = () => {
                             strokeWidth={3}
                             onClick={(e) => {setEditId(product._id), setEditProduct(true)}}
                           /> */}
-                          <Delete
-                            className="text-red-600 cursor-pointer"
-                            theme="outline"
-                            size="20"
-                            strokeWidth={3}
-                            onClick={() => deleteProduct(product._id)}
-                          />
+                          <span className="relative">
+                            <span
+                              id={product._id}
+                              className="w-full h-full flex bg-red-900 absolute opacity-0 cursor-pointer"
+                              onClick={() => {
+                                setDeleteModal(true), setDeleteId(product._id);
+                              }}
+                            ></span>
+                            <Delete
+                              className="text-red-600 cursor-pointer"
+                              theme="outline"
+                              size="20"
+                              strokeWidth={3}
+                            />
+                          </span>
                         </span>
                       </td>
                     </tr>
@@ -421,17 +470,18 @@ export const Products = () => {
               currentPage={currentPage}
             />
           )}
+
           <div
-            id="deletemany-modal"
-            tabIndex="-1"
-            className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+            className={`fixed inset-0 z-50 flex items-center justify-center ${
+              deleteModal ? "flex" : "hidden"
+            } bg-[rgba(107,107,107,0.5)] overflow-hidden w-screen h-screen`}
           >
             <div className="relative p-4 w-full max-w-md max-h-full">
-              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <div className="relative bg-white rounded-lg shadow">
                 <button
                   type="button"
-                  className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-hide="deletemany-modal"
+                  className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-[#f8fafb] hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                  onClick={() => setDeleteModal(false)}
                 >
                   <svg
                     className="w-3 h-3"
@@ -452,7 +502,7 @@ export const Products = () => {
                 </button>
                 <div className="p-4 md:p-5 text-center">
                   <svg
-                    className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+                    className="mx-auto mb-4 text-gray-400 w-12 h-12"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -466,21 +516,22 @@ export const Products = () => {
                       d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                     />
                   </svg>
-                  <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                    Are you sure you want to delete this product?
+                  <h3 className="mb-5 text-lg font-normal text-gray-500">
+                    Are you sure you want to delete this Category?
                   </h3>
                   <button
-                    data-modal-hide="deletemany-modal"
-                    onClick={() => batchDelete()}
+                    onClick={() => {
+                      deleteProduct(), setDeleteModal(false);
+                    }}
                     type="button"
-                    className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2"
+                    className="text-white bg-[#20a076] hover:bg-[#1b805e] focus:ring-4 focus:outline-none focus:ring-[#20a076] font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2"
                   >
-                    Yes, Im sure
+                    Yes, I'm sure
                   </button>
                   <button
-                    data-modal-hide="deletemany-modal"
+                    onClick={() => setDeleteModal(false)}
                     type="button"
-                    className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                    className="text-gray-500 bg-[#ffffff] hover:bg-[#f8fafb] focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10"
                   >
                     No, cancel
                   </button>

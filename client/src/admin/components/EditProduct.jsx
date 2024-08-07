@@ -7,10 +7,9 @@ import {
 } from "../../slices/productsApiSlice";
 import Loader from "../../components/Loader";
 
-const EditProduct = ({ refetch, product }) => {
+const EditProduct = ({ refetch, product, updateProduct }) => {
   const { setEditProduct } = useContext(AppStateContext);
-  const [updateProduct, { isLoading: isupdating, error: iserr }] =
-    useUpdateProductMutation();
+
   const {
     data: categories,
     isLoading: onloading,
@@ -34,32 +33,32 @@ const EditProduct = ({ refetch, product }) => {
     }));
   };
 
-  // update product
-  const editProduct = async (e, data = undefined) => {
-    if (data) {
-      e.preventDefault();
-      const res = await updateProduct(data).unwrap();
+  // // update product
+  // const editProduct = async (e, data = undefined) => {
+  //   if (data) {
+  //     e.preventDefault();
+  //     const res = await updateProduct(data).unwrap();
 
-      if (res) {
-        setEditProduct(false);
-        refetch();
-      }
-    } else {
-      const data = {
-        id: e.id,
-        published: e.value,
-      };
-      try {
-        const res = await updateProduct(data).unwrap();
+  //     if (res) {
+  //       setEditProduct(false);
+  //       refetch();
+  //     }
+  //   } else {
+  //     const data = {
+  //       id: e.id,
+  //       published: e.value,
+  //     };
+  //     try {
+  //       const res = await updateProduct(data).unwrap();
 
-        if (res) {
-          refetch();
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  //       if (res) {
+  //         refetch();
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   return (
     <div>
@@ -87,7 +86,7 @@ const EditProduct = ({ refetch, product }) => {
       <div className="flex w-full h-full overflow-x-scroll pt-5">
         <div className="flex w-full px-5">
           <form
-            onSubmit={(e) => editProduct(e, editForm)}
+            onSubmit={(e) => updateProduct(e, editForm)}
             className="flex flex-col w-full gap-y-5"
           >
             <div className="flex w-full  ">
@@ -123,8 +122,8 @@ const EditProduct = ({ refetch, product }) => {
                 </option>
                 {onloading ? (
                   <Loader size="100" />
-                ) : iserr ? (
-                  <h1>{iserr?.error}</h1>
+                ) : iserror ? (
+                  <h1>{iserror?.error}</h1>
                 ) : (
                   categories?.map((cat, index) => (
                     <option key={index} value={cat.name}>
