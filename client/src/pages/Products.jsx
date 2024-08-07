@@ -1,6 +1,7 @@
 import { Right } from "@icon-park/react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Loader from "../components/Loader";
 import {
   Navigation,
   Pagination,
@@ -15,11 +16,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "animate.css";
-import products from "../data/products";
 import ProductCard from "../components/ProductCard";
 import { useEffect } from "react";
-
+import { useGetProductsQuery } from "../slices/productsApiSlice";
 const Products = () => {
+  const { data: products, isLoading, error } = useGetProductsQuery();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -111,16 +112,22 @@ const Products = () => {
           </SwiperSlide>
         </Swiper>
       </div>
-      <div className="flex flex-wrap">
-        {products.map((product) => (
-          <div
-            key={product._id}
-            className="flex w-full md:w-[50%} lg:w-[33%] xl:w-[25%] p-2"
-          >
-            <ProductCard product={product} />
-          </div>
-        ))}
-      </div>
+      {isLoading ? (
+        <Loader size="100" />
+      ) : error ? (
+        <h1>{error?.error}</h1>
+      ) : (
+        <div className="flex flex-wrap">
+          {products.map((product) => (
+            <div
+              key={product._id}
+              className="flex w-full md:w-[50%} lg:w-[33%] xl:w-[25%] p-2"
+            >
+              <ProductCard product={product} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

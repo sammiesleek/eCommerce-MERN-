@@ -13,7 +13,7 @@ const Register = () => {
   }, []);
 
   const handleGoogleLogin = async () => {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "http://localhost:5000/api/auth/google";
   };
 
   const [formData, setFormData] = useState({
@@ -183,7 +183,7 @@ const Register = () => {
         </form>
         <button
           className=" flex px-4 py-2 border items-center justify-center mt-5 gap-x-4 w-fit mx-auto"
-          onClick={() => handleGoogleLogin()}
+          onClick={handleGoogleLogin}
         >
           <img className="h-5 w-5" src="/images/icons/google.png" alt="" />{" "}
           Register with Google

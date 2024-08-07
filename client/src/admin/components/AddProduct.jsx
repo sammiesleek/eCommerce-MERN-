@@ -1,64 +1,99 @@
 import { Close } from "@icon-park/react";
 import { useContext, useState } from "react";
 import { AppStateContext } from "../../ContextApi/AppStateContext";
+import {
+  useCreateProductMutation,
+  useGetCategoriesQuery,
+} from "../../slices/productsApiSlice";
+import Loader from "../../components/Loader";
+import { uploadfiles } from "../../utils/FilesUpload";
+import { toast } from "react-toastify";
+const AddProduct = ({ reload }) => {
+  const { setAddProduct, profile } = useContext(AppStateContext);
+  const {
+    data: categories,
+    isLoading: onloading,
+    error: iserr,
+  } = useGetCategoriesQuery();
+  const [createProduct, { isLoading: creatingProduct }] =
+    useCreateProductMutation();
 
-const AddProduct = () => {
-  const { setAddProduct } = useContext(AppStateContext);
-
+  const [catImages, setProductImages] = useState([]);
+  const [submittingProduct, setSubmittingProduct] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
-    category: "Category",
+    brand: "",
+    countInStock: "",
+    category: "",
     price: "",
     quantity: "",
-    desc: "",
+    description: "",
     images: "",
   });
 
   const handleChange = (e) => {
-    if (e.target.type === "file") {
-      //  setImages(e.target.files);
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-      setFormData((prevState) => ({
-        ...prevState,
-        ["images"]: e.target.files,
-      }));
+  const addImageToPost = ({ files }) => {
+    if (files.length > 10) {
+      console.log("Please upload maximum of 10 files");
+      return;
+    }
+    let updatedGallary = [];
+    for (let i = 0; i < files.length; i++) {
+      const newImage = files[i];
+      newImage["id"] = Math.random();
 
-      // const filesArray = Array.form(e.target.files);
-      // setFormData((prevState) => ({
-      //   ...prevState,
-      //   [e.target.name]: filesArray,
-      // }));
-    } else {
-      setFormData((prevState) => ({
-        ...prevState,
-        [e.target.name]: e.target.value,
-      }));
+      if (
+        !files[i].name.match(/\.(jpg|jpeg|png|gif|webp)$/) ||
+        files[i].size > 5000000
+      ) {
+        console.log("Image File not Supported, Please ReUpload");
+      } else {
+        // setError(null);
+        updatedGallary.push(newImage);
+      }
+    }
+
+    setProductImages(updatedGallary);
+  };
+
+  const subMitForm = async (e) => {
+    setSubmittingProduct(true);
+    // StatusAlertService.showError("hii");
+    e.preventDefault();
+
+    try {
+      const uploadedImages = await uploadfiles("products", "images", catImages);
+      if (!uploadedImages) {
+        setSubmittingProduct(false);
+        return;
+      }
+      const updatedFormData = {
+        ...formData,
+        images: JSON.stringify(uploadedImages),
+        user: profile._id,
+      };
+
+      const res = await createProduct(updatedFormData).unwrap();
+      if (res) {
+        console.log(res);
+      }
+      reload();
+      setSubmittingProduct(false);
+      setAddProduct(false);
+      toast.error("error");
+    } catch (error) {
+      setSubmittingProduct(false);
     }
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(formData);
 
-    // try {
-    //   dispatch(saveShippindAddress(formData));
-
-    //   const res = await createOrder({
-    //     orderItems: cartItems,
-    //     shippingAddress,
-    //     paymentMethod: "online",
-    //     itemsPrice: itemsPrice,
-    //     taxPrice: taxPrice,
-    //     shippingPrice: shippingPrice,
-    //     totalPrice: totalPice,
-    //   }).unwrap();
-    //   navigate(`/tracking/${res._id}`);
-
-    //   setTimeout(() => {
-    //     dispatch(clearCartItems());
-    //   }, 200);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+  const handleSelectChange = (event) => {
+    console.log(event.target.value);
   };
 
   return (
@@ -87,8 +122,7 @@ const AddProduct = () => {
       <div className="flex w-full h-full overflow-x-scroll pt-5">
         <div className="flex w-full px-5">
           <form
-            action=""
-            // onSubmit={handleSubmit}
+            onSubmit={(e) => subMitForm(e)}
             className="flex flex-col w-full gap-y-5"
           >
             <div className="flex w-full  ">
@@ -101,7 +135,7 @@ const AddProduct = () => {
                 placeholder="Product's Name/ Title"
                 name="title"
                 value={formData.title}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
               />
             </div>
             <div className="flex w-full ">
@@ -110,19 +144,30 @@ const AddProduct = () => {
               </p>
               <select
                 className="bg-[#f2f4f6] block  w-[70%] ml-auto  px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-md  focus:ring-transparent focus:border-[#1FA076]"
-                name="Category"
-                onChange={handleChange}
+                name="category"
+                onChange={(e) => handleChange(e)}
+                value={formData.category}
               >
                 <option
                   className="active:bg-green-700 flex hover:bg-red-900 hover:text-red-300"
                   selected
+                  value=""
+                  disabled
                 >
-                  {/* {formData.category} */}
+                  Select Category
                 </option>
-                <option value="US">United States</option>
-                <option value="CA">Canada</option>
-                <option value="FR">France</option>
-                <option value="DE">Germany</option>
+
+                {onloading ? (
+                  <Loader size="100" />
+                ) : iserr ? (
+                  <h1>{iserr?.error}</h1>
+                ) : (
+                  categories?.map((cat, index) => (
+                    <option key={index} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
@@ -136,7 +181,7 @@ const AddProduct = () => {
                 placeholder="Product's Price"
                 name="price"
                 value={formData.price}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
               />
             </div>
             <div className="flex">
@@ -148,9 +193,23 @@ const AddProduct = () => {
                 className="w-[70%] ml-auto py-3   rounded-md border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-green-900"
                 type="number"
                 placeholder="Product's Count"
-                name="quantity"
-                value={formData.quantity}
-                onChange={handleChange}
+                name="countInStock"
+                value={formData.countInStock}
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+            <div className="flex">
+              <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
+                {" "}
+                Product&apos;s Brand
+              </p>
+              <input
+                className="w-[70%] ml-auto py-3   rounded-md border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-green-900"
+                type="number"
+                placeholder="Product's Brand"
+                name="brand"
+                value={formData.brand}
+                onChange={(e) => handleChange(e)}
               />
             </div>
             <div className="flex">
@@ -162,9 +221,9 @@ const AddProduct = () => {
                 className="w-[70%] ml-auto p-4  rounded-md  border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-green-900"
                 placeholder="Product Description"
                 rows={5}
-                name="desc"
-                value={formData.desc}
-                onChange={handleChange}
+                name="description"
+                value={formData.description}
+                onChange={(e) => handleChange(e)}
               />
             </div>
 
@@ -203,7 +262,7 @@ const AddProduct = () => {
                   multiple
                   name="images"
                   value={formData.images}
-                  onChange={handleChange}
+                  onChange={(e) => addImageToPost(e.target)}
                 />
               </label>
             </div>

@@ -29,6 +29,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import Profile from "./pages/Profile.jsx";
+import Validate from "./pages/Validate.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />}>
         <Route index exact element={<HomePage />} />
         <Route path="/products" exact element={<Products />} />
+        <Route path="/validate" exact element={<Validate />} />
         <Route path="/products/:id" exact element={<Product />} />
         <Route path="/cart" exact element={<ShoppingCart />} />
         <Route path="/login" exact element={<Login />} />

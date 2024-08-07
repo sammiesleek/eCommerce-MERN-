@@ -1,9 +1,65 @@
 import { Close } from "@icon-park/react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppStateContext } from "../../ContextApi/AppStateContext";
+import {
+  useGetCategoriesQuery,
+  useUpdateProductMutation,
+} from "../../slices/productsApiSlice";
+import Loader from "../../components/Loader";
 
-const EditProduct = () => {
+const EditProduct = ({ refetch, product }) => {
   const { setEditProduct } = useContext(AppStateContext);
+  const [updateProduct, { isLoading: isupdating, error: iserr }] =
+    useUpdateProductMutation();
+  const {
+    data: categories,
+    isLoading: onloading,
+    error: iserror,
+  } = useGetCategoriesQuery();
+  const [editForm, setEditForm] = useState({
+    name: product.name,
+    brand: product.brand,
+    countInStock: product.countInStock,
+    category: product.category,
+    price: product.price,
+    // quantity: product.quantity,
+    description: product.description,
+    id: product._id,
+  });
+
+  const updateEditForm = (e) => {
+    setEditForm((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  // update product
+  const editProduct = async (e, data = undefined) => {
+    if (data) {
+      e.preventDefault();
+      const res = await updateProduct(data).unwrap();
+
+      if (res) {
+        setEditProduct(false);
+        refetch();
+      }
+    } else {
+      const data = {
+        id: e.id,
+        published: e.value,
+      };
+      try {
+        const res = await updateProduct(data).unwrap();
+
+        if (res) {
+          refetch();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <div>
@@ -30,7 +86,10 @@ const EditProduct = () => {
       </div>
       <div className="flex w-full h-full overflow-x-scroll pt-5">
         <div className="flex w-full px-5">
-          <form action="" className="flex flex-col w-full gap-y-5">
+          <form
+            onSubmit={(e) => editProduct(e, editForm)}
+            className="flex flex-col w-full gap-y-5"
+          >
             <div className="flex w-full  ">
               <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
                 Product&apos;s Name
@@ -39,6 +98,9 @@ const EditProduct = () => {
                 className="w-[70%] ml-auto   rounded-md border-gray-500 border py-3 focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
                 type="text"
                 placeholder="Product's Name/ Title"
+                value={editForm.name}
+                name="name"
+                onChange={(e) => updateEditForm(e)}
               />
             </div>
             <div className="flex w-full ">
@@ -46,17 +108,30 @@ const EditProduct = () => {
                 {" "}
                 Product&apos;s Category
               </p>
-              <select className="bg-[#f2f4f6] block  w-[70%] ml-auto  px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-md  focus:ring-transparent focus:border-[#1FA076]">
+              <select
+                value={editForm.category}
+                name="category"
+                onChange={(e) => updateEditForm(e)}
+                className="bg-[#f2f4f6] block  w-[70%] ml-auto  px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-md  focus:ring-transparent focus:border-[#1FA076]"
+              >
                 <option
                   className="active:bg-green-700 flex hover:bg-red-900 hover:text-red-300"
                   selected
+                  disabled
                 >
                   Category
                 </option>
-                <option value="US">United States</option>
-                <option value="CA">Canada</option>
-                <option value="FR">France</option>
-                <option value="DE">Germany</option>
+                {onloading ? (
+                  <Loader size="100" />
+                ) : iserr ? (
+                  <h1>{iserr?.error}</h1>
+                ) : (
+                  categories?.map((cat, index) => (
+                    <option key={index} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
@@ -68,6 +143,9 @@ const EditProduct = () => {
                 className="w-[70%] ml-auto  rounded-md  py-3 border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
                 type="text"
                 placeholder="Product's Price"
+                value={editForm.price}
+                name="price"
+                onChange={(e) => updateEditForm(e)}
               />
             </div>
             <div className="flex">
@@ -79,6 +157,22 @@ const EditProduct = () => {
                 className="w-[70%] ml-auto py-3   rounded-md border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
                 type="text"
                 placeholder="Product's Count"
+                value={editForm.countInStock}
+                name="countInStock"
+                onChange={(e) => updateEditForm(e)}
+              />
+            </div>
+            <div className="flex">
+              <p className=" hidden sm:block text-light-textPrimary text-base font-semibold">
+                {" "}
+                Product&apos;s Brand
+              </p>
+              <input
+                className="w-[70%] ml-auto p-4  rounded-md  border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
+                rows={5}
+                value={editForm.brand}
+                name="brand"
+                onChange={(e) => updateEditForm(e)}
               />
             </div>
             <div className="flex">
@@ -90,10 +184,13 @@ const EditProduct = () => {
                 className="w-[70%] ml-auto p-4  rounded-md  border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-red-900"
                 placeholder="Product Description"
                 rows={5}
+                value={editForm.description}
+                name="description"
+                onChange={(e) => updateEditForm(e)}
               />
             </div>
 
-            <div className="flex items-center justify-center w-full relative">
+            <div className="hidden items-center justify-center w-full relative">
               <label
                 htmlFor="dropzone-file"
                 className="flex flex-col items-center justify-center w-full h-56 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50   hover:bg-gray-100 "
@@ -131,7 +228,7 @@ const EditProduct = () => {
             <div className="flex justify-end">
               <input
                 className="bg-[#1FA076] px-10 py-3 font-bold text-lg  text-white rounded-sm cursor-pointer hover:bg-gray-800"
-                type="button"
+                type="submit"
                 value="Update"
               />
             </div>

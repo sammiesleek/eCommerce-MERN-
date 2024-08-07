@@ -1,23 +1,17 @@
 // import { Close } from "@icon-park/react";
 // import { AppStateContext } from "../ContextApi/AppStateContext";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../slices/usersApiSlice";
-import { setCredentials } from "../slices/authSlice";
+// import { setCredentials } from "../slices/authSlice";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 import { StatusAlertService } from "react-status-alert";
+import { AppStateContext } from "../ContextApi/AppStateContext";
+// import { useGoogleMutation } from "../slices/googleAuthApiSlice";
 const Login = () => {
-  const handleGoogleLogin = async () => {
-    fetch("http://localhost:5000/auth/google/callback")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => console.error("Error:", error));
-  };
-
+  const { setProfile } = useContext(AppStateContext);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -27,14 +21,13 @@ const Login = () => {
     password: "",
   });
   const handleChange = (e) => {
-    console.log("first");
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const dispath = useDispatch();
+  // const dispath = useDispatch();
   const navigate = useNavigate();
 
   const [login, { isLoading }] = useLoginMutation();
@@ -56,10 +49,10 @@ const Login = () => {
     if (formData.email !== "" && formData.password) {
       try {
         const res = await login(formData).unwrap();
-        dispath(setCredentials({ ...res }));
+        // dispath(setCredentials({ ...res }));
+        setProfile(res);
         navigate(redirect);
       } catch (error) {
-        console.log(error);
         toast.error(error?.data?.message || error.error);
         // StatusAlertService.showError(error.error);
       }
@@ -71,7 +64,7 @@ const Login = () => {
     <div className="p-[130px]">
       <div className="flex flex-col h-[500px] w-[400px] max-w-[500px] bg-white m-auto py-4 px-6 relative z-10">
         <h4 className="text-center text-3xl font-semibold my-5">Login</h4>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <div className="flex flex-col mt-10 gap-y-5">
             <div className="flex w-full">
               <input
@@ -119,12 +112,9 @@ const Login = () => {
             </span>
           </div>
         </form>
-        <button
-          className=" flex px-4 py-2 border items-center justify-center mt-5 gap-x-4 w-fit mx-auto"
-          onClick={() => handleGoogleLogin()}
-        >
+        <button className=" flex px-4 py-2 border items-center justify-center mt-5 gap-x-4 w-fit mx-auto">
           <img className="h-5 w-5" src="/images/icons/google.png" alt="" />{" "}
-          Login with Google
+          <a href="http://localhost:5000/api/auth/google">Login with Google</a>
         </button>
       </div>
     </div>

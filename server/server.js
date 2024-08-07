@@ -2,50 +2,60 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";
+import dotenv from "dotenv";
+import cors from "cors";
+
+import connectDB from "./config/db.js";
+import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import productRoutes from "./routes/productRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
-import dotenv from "dotenv";
-import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
-import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
-dotenv.config();
-const port = 5000;
-connectDB();
-const app = express();
 
-// body parser middleware
+dotenv.config();
+connectDB();
+
+const app = express();
+const port = process.env.PORT || 5000;
+
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors());
 
-// sessions
-
+// Session configuration
 app.use(
   session({
-    secret: "keyboard cat",
-    resave: false,
+    secret: process.env.SESSION_SECRET || "default_secret",
+    resave: true,
     saveUninitialized: false,
   })
 );
 
-// passport middleware
+// Passport.js configuration
 app.use(passport.initialize());
 app.use(passport.session());
 
-// cookie parser
-app.use(cookieParser());
-
+// Routes
 app.get("/api", (req, res) => {
   res.send("API is running...");
 });
-app.use("/api/products", productRoutes);
-app.use("/api/users", userRoutes);
-app.use("/auth", authRoutes);
-app.use("/api/orders", orderRoutes);
+
 app.get("/api/config/paystack", (req, res) =>
   res.status(200).send({ clientId: process.env.REACT_APP_PAYSTAC_KEY })
 );
 
-app.listen(port, () => console.log(`server running on port ${port}`));
-app.use(errorHandler);
+app.use("/api/products", productRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/auth", authRoutes);
+
+// Error handling middleware
 app.use(notFound);
+app.use(errorHandler);
+
+// Start the server
+app.listen(port, () => console.log(`Server running on port ${port}`));

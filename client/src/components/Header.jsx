@@ -26,8 +26,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cartItems } = useSelector((state) => state.cart);
-  const { userInfo } = useSelector((state) => state.auth);
-  const { cartModal, setCartModal } = useContext(AppStateContext);
+  // const { userInfo } = useSelector((state) => state.auth);
+  const { cartModal, setCartModal, profile } = useContext(AppStateContext);
   const [navState, setNavState] = useState(false);
   const [logoutApiCall] = useLogoutMutation();
   const handleLogout = async () => {
@@ -95,15 +95,15 @@ const Header = () => {
               <span className="w-1/2 py-3 bg-white flex justify-center profile_click  relative  items-center">
                 <span className="absolute top-3 right-0    flex-col py-4 px-3 w-[200px] profile_tab">
                   <span className="bg-white border flex flex-col pb-4 text-base  text-black gap-y-1">
-                    {userInfo && (
+                    {profile && (
                       <span
                         to="/login"
                         className="bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
                       >
-                        welcome, {userInfo.firstName}
+                        welcome, {profile.firstName}
                       </span>
                     )}
-                    {!userInfo && (
+                    {!profile && (
                       <Link
                         to="/login"
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -111,7 +111,7 @@ const Header = () => {
                         Login
                       </Link>
                     )}
-                    {!userInfo && (
+                    {!profile && (
                       <Link
                         to="/register"
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -119,7 +119,7 @@ const Header = () => {
                         Register
                       </Link>
                     )}
-                    {userInfo && (
+                    {profile && (
                       <Link
                         to="/profile"
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -127,7 +127,7 @@ const Header = () => {
                         Profile
                       </Link>
                     )}
-                    {userInfo && userInfo.isAdmin && (
+                    {profile && profile.isAdmin && (
                       <Link
                         to="/admin"
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -135,7 +135,7 @@ const Header = () => {
                         Dashboard
                       </Link>
                     )}
-                    {userInfo && (
+                    {profile && (
                       <Link
                         onClick={handleLogout}
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -208,15 +208,15 @@ const Header = () => {
           <span className="hidden md:flex relative profile_click">
             <span className="absolute top-3 right-0    flex-col py-4 px-3 w-[200px] profile_tab">
               <span className="bg-white border flex flex-col pb-4 text-base  text-black gap-y-1">
-                {userInfo && (
+                {profile && (
                   <span
                     to="/login"
                     className="bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
                   >
-                    welcome, {userInfo.firstName}
+                    welcome, {profile.firstName}
                   </span>
                 )}
-                {!userInfo && (
+                {!profile && (
                   <Link
                     to="/login"
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -224,7 +224,7 @@ const Header = () => {
                     Login
                   </Link>
                 )}
-                {!userInfo && (
+                {!profile && (
                   <Link
                     to="/register"
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -232,7 +232,7 @@ const Header = () => {
                     Register
                   </Link>
                 )}
-                {userInfo && (
+                {profile && (
                   <Link
                     to="/profile"
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -240,7 +240,7 @@ const Header = () => {
                     Profile
                   </Link>
                 )}
-                {userInfo && userInfo.isAdmin && (
+                {profile && profile.isAdmin && (
                   <Link
                     to="/admin"
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -248,7 +248,7 @@ const Header = () => {
                     Dashboard
                   </Link>
                 )}
-                {userInfo && (
+                {profile && (
                   <Link
                     onClick={handleLogout}
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"

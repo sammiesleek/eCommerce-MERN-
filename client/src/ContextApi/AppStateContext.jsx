@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { useAuthvalidateMutation } from "../slices/usersApiSlice";
 
 export const AppStateContext = createContext();
 
@@ -7,13 +8,28 @@ export const ContextProvider = ({ children }) => {
   const [registerModal, setRegisterMoadal] = useState(false);
   const [adminSideBar, setAdminSideBar] = useState(true);
   const [loginModal, setLoginModal] = useState(false);
-
+  const [profile, setProfile] = useState(undefined);
   const [message, setMessage] = useState("info");
   const [severity, setSeverity] = useState("info");
   const [isError, setIsError] = useState(false);
   const [qty, setQty] = useState(1);
   const [addProduct, setAddProduct] = useState(false);
   const [editProduct, setEditProduct] = useState(false);
+  const [validateGoogle] = useAuthvalidateMutation();
+
+  useEffect(() => {
+    const validateGoogleAsync = async () => {
+      try {
+        const res = await validateGoogle().unwrap();
+        setProfile(res.user);
+      } catch (error) {
+        // console.error(error);
+      }
+    };
+
+    validateGoogleAsync();
+  }, [validateGoogle]);
+
   return (
     <AppStateContext.Provider
       value={{
@@ -37,6 +53,8 @@ export const ContextProvider = ({ children }) => {
         setAddProduct,
         editProduct,
         setEditProduct,
+        profile,
+        setProfile,
       }}
     >
       {children}

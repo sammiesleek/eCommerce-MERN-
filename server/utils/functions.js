@@ -11,7 +11,6 @@ export const verifyPaystackPayment = async (paymentId) => {
   try {
     const paystackResponse = await fetch(url, options);
     const jsonResponse = await paystackResponse.json();
-
     return jsonResponse.data;
   } catch (error) {
     console.error("Error verifying payment:", error);

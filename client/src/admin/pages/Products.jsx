@@ -2,36 +2,69 @@ import { useContext, useEffect, useState } from "react";
 import { NairaFormatter } from "../../utils/cartUtils";
 import { AppStateContext } from "../../ContextApi/AppStateContext";
 import { Avatar, Close, Delete, Editor } from "@icon-park/react";
-import products from "../../data/products";
+// import products from "../../data/products";
 import Pagination from "../../components/Pagination";
 import AddProduct from "../components/AddProduct";
 import EditProduct from "../components/EditProduct";
+import {
+  useGetProductsQuery,
+  useGetCategoriesQuery,
+} from "../../slices/productsApiSlice";
+import Loader from "../../components/Loader";
 
 export const Products = () => {
-  const { adminSideBar } = useContext(AppStateContext);
+  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  const {
+    data: categories,
+    isLoading: onloading,
+    error: iserr,
+  } = useGetCategoriesQuery();
+  const [editPro, setEditpro] = useState(undefined);
+  const [searchQuery, setSearchQuery] = useState("");
   const [checkBoxes, setCheckBoxes] = useState(undefined);
   const [mainCheck, setMainCheck] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 3;
-  const [filteredProduct, setFilteredProduct] = useState(products);
+  const perPage = 10;
+  const [filteredProduct, setFilteredProduct] = useState(undefined);
   const indexOfLastData = currentPage * perPage;
   const indexOfFirstData = indexOfLastData - perPage;
-
-  const { addProduct, setAddProduct, editProduct, setEditProduct } =
-    useContext(AppStateContext);
-
+  const {
+    addProduct,
+    adminSideBar,
+    setAddProduct,
+    editProduct,
+    setEditProduct,
+  } = useContext(AppStateContext);
   const paginate = (number) => {
     let page = filteredProduct.length / perPage;
-    console.log(page);
+
     if (number > 0 && number <= page) {
       setCurrentPage(number);
     }
   };
-  {
-    /* <input type="file" accept="image/*"  onchange="showMyImage(this)" />
- <br/>
-<img id="thumbnil" style="width:20%; margin-top:10px;"  src="" alt="image"/> */
-  }
+
+  const handleInputChange = (e) => {
+    // const sanitizedValue = e.target.value.replace(
+    //   /[\/@#$^&*.,[\]{}+_=%!\-|~`"':;/?()]/g,
+    //   ""
+    // );
+    setSearchQuery(e.target.value);
+  };
+
+  useEffect(() => {
+    setFilteredProduct(products);
+    if (searchQuery.trim() !== "") {
+      const res = products.filter((data) =>
+        data.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase())
+      );
+
+      if (res.length > 0) {
+        setFilteredProduct(res);
+      } else {
+        setFilteredProduct([]);
+      }
+    }
+  }, [searchQuery, products]);
 
   function showMyImage(fileInput) {
     var files = fileInput.files;
@@ -52,6 +85,10 @@ export const Products = () => {
       reader.readAsDataURL(file);
     }
   }
+
+  useEffect(() => {
+    setFilteredProduct(products);
+  }, [products]);
 
   useEffect(() => {
     setCheckBoxes(document.querySelectorAll(".table-item input"));
@@ -103,6 +140,13 @@ export const Products = () => {
     const res = filteredProduct.filter((x) => x._id !== id);
     setFilteredProduct(res);
   };
+
+  const handleEdit = (id) => {
+    const product = products.filter((product) => product._id === id)[0];
+    setEditpro(product);
+    setEditProduct(true);
+  };
+
   return (
     <div
       className={`${
@@ -115,16 +159,21 @@ export const Products = () => {
           addProduct ? "right-0" : "right-[-200%]"
         }  h-screen shadow-2xl bg-light-bgMid  w-full md:w-80% lg:w-[800px] z-50 transition-all ease-in-out `}
       >
-        <AddProduct />
+        <AddProduct reload={refetch} />
       </div>
       {/* edit modal  */}
-      <div
-        className={`flex flex-col product_modal fixed top-0 ${
-          editProduct ? "right-0" : "right-[-200%]"
-        }  h-screen shadow-2xl bg-light-bgMid  w-full md:w-80% lg:w-[800px] z-50 transition-all ease-in-out `}
-      >
-        <EditProduct />
-      </div>
+
+      {editProduct ? (
+        <div
+          className={`flex flex-col product_modal fixed top-0 "right-0" "
+          }  h-screen shadow-2xl bg-light-bgMid  w-full md:w-80% lg:w-[800px] z-50 transition-all ease-in-out `}
+        >
+          <EditProduct refetch={refetch} product={editPro} />
+        </div>
+      ) : (
+        ""
+      )}
+
       <div className="flex flex-col w-full max-w-7xl  mx-auto pb-20">
         <div className="flex">
           <p className="font-bold text-light-textPrimary  text-xl mb-5">
@@ -139,6 +188,8 @@ export const Products = () => {
                   className="w-full  border-b-gray-200 border-transparent focus:border-transparent focus:border-b-[#1FA076] focus:outline-transparent focus:ring-transparent py-3"
                   type="text"
                   placeholder="search"
+                  value={searchQuery}
+                  onChange={handleInputChange}
                 />
               </form>
             </div>
@@ -170,10 +221,17 @@ export const Products = () => {
                 >
                   Category
                 </option>
-                <option value="US">United States</option>
-                <option value="CA">Canada</option>
-                <option value="FR">France</option>
-                <option value="DE">Germany</option>
+                {onloading ? (
+                  <Loader size="100" />
+                ) : iserr ? (
+                  <h1>{iserr?.error}</h1>
+                ) : (
+                  categories?.map((cat, index) => (
+                    <option key={index} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
             <div className="flex w-full md:w-[49%] lg:w-[24%] bg-red-100 rounded-md">
@@ -248,97 +306,121 @@ export const Products = () => {
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {filteredProduct
-                ?.slice(indexOfFirstData, indexOfLastData)
-                .map((product, index) => (
-                  <tr
-                    key={index}
-                    className="bg-white  border-b   hover:bg-gray-50 "
-                  >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center table-item">
-                        <input
-                          id={product._id}
-                          type="checkbox"
-                          className="input w-[15px] h-[15px]  border-[#1FA076] rounded-sm checked:bg-[#1FA076] focus:ring-transparent  cursor-pointer "
-                          onClick={() => checkbox()}
-                        />
-                        <label
-                          htmlFor="checkbox-table-search-1"
-                          className="sr-only"
-                        ></label>
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className=" px-6 py-4 text-gray-900 whitespace-nowrap  "
-                    >
-                      <div className="ps-3 flex gap-x-4 items-center">
-                        <img
-                          className="w-[30px] h-[30px]"
-                          src={product.image}
-                          alt=""
-                        />
 
-                        <p className="font-normal mb-0 text-gray-500">
-                          {product.name}
-                        </p>
-                      </div>
-                    </th>
-                    <td className="px-6 py-4">React Developer</td>
-                    <td className="px-6 py-4">
-                      {NairaFormatter.format(product.price)}
-                    </td>
-                    <td className="px-6 py-4">{product.countInStock}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                        Online
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <label className="relative inline-flex items-center me-5 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          value=""
-                          className="sr-only peer"
-                        />
-                        <div className="w-11 h-6 bg-red-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-transparent  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-yellow-700 peer-checked:bg-green-900"></div>
-                      </label>
-                    </td>
-                    <td className="px-6 py-4"> VIEW</td>
-                    <td className="px-6 py-4">
-                      <span className="flex gap-x-3 ">
-                        <Editor
-                          className="cursor-pointer"
-                          theme="outline"
-                          size="20"
-                          fill="#333"
-                          strokeWidth={3}
-                          onClick={() => setEditProduct(true)}
-                        />
-                        <Delete
-                          className="text-red-600 cursor-pointer"
-                          theme="outline"
-                          size="20"
-                          strokeWidth={3}
-                          onClick={() => deleteProduct(product._id)}
-                        />
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
+            {isLoading ? (
+              <Loader size="100" />
+            ) : error ? (
+              <h1>{error?.error}</h1>
+            ) : (
+              <tbody>
+                {filteredProduct
+                  ?.slice(indexOfFirstData, indexOfLastData)
+                  .map((product, index) => (
+                    <tr
+                      key={index}
+                      className="bg-white  border-b   hover:bg-gray-50 "
+                    >
+                      <td className="w-4 p-4">
+                        <div className="flex items-center table-item">
+                          <input
+                            id={product._id}
+                            type="checkbox"
+                            className="input w-[15px] h-[15px]  border-[#1FA076] rounded-sm checked:bg-[#1FA076] focus:ring-transparent  cursor-pointer "
+                            onClick={() => checkbox()}
+                          />
+                          <label
+                            htmlFor="checkbox-table-search-1"
+                            className="sr-only"
+                          ></label>
+                        </div>
+                      </td>
+                      <th
+                        scope="row"
+                        className=" px-6 py-4 text-gray-900 whitespace-nowrap  "
+                      >
+                        <div className="ps-3 flex gap-x-4 items-center">
+                          <img
+                            className="w-[30px] h-[30px]"
+                            src={JSON.parse(product.image)[0]}
+                            alt=""
+                          />
+
+                          <p className="font-normal mb-0 text-gray-500">
+                            {product.name}
+                          </p>
+                        </div>
+                      </th>
+                      <td className="px-6 py-4">{product.category}</td>
+                      <td className="px-6 py-4">
+                        {NairaFormatter.format(product.price)}
+                      </td>
+                      <td className="px-6 py-4">{product.countInStock}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center">
+                          <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
+                          Online
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <label className="relative inline-flex items-center me-5 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            value=""
+                            className="sr-only peer"
+                          />
+                          <div className="w-11 h-6 bg-red-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-transparent  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-yellow-700 peer-checked:bg-green-900"></div>
+                        </label>
+                      </td>
+                      <td className="px-6 py-4"> VIEW</td>
+                      <td className="px-6 py-4">
+                        <span className="flex gap-x-3 ">
+                          <span className="relative">
+                            <span
+                              id={product._id}
+                              onClick={() => {
+                                handleEdit(product._id);
+                              }}
+                              className="w-full h-full flex bg-red-900 absolute opacity-0 cursor-pointer"
+                            ></span>
+                            <Editor
+                              className="cursor-pointer"
+                              theme="outline"
+                              size="20"
+                              fill="#333"
+                              strokeWidth={3}
+                            />
+                          </span>
+
+                          {/* <Editor
+                            className="cursor-pointer"
+                            theme="outline"
+                            size="20"
+                            fill="#333"
+                            strokeWidth={3}
+                            onClick={(e) => {setEditId(product._id), setEditProduct(true)}}
+                          /> */}
+                          <Delete
+                            className="text-red-600 cursor-pointer"
+                            theme="outline"
+                            size="20"
+                            strokeWidth={3}
+                            onClick={() => deleteProduct(product._id)}
+                          />
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            )}
           </table>
-          {
+          {!isLoading && (
             <Pagination
               perPage={perPage}
-              totalData={filteredProduct.length}
+              totalData={filteredProduct?.length}
               paginate={paginate}
               currentPage={currentPage}
             />
-          }
+          )}
           <div
             id="deletemany-modal"
             tabIndex="-1"

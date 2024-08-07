@@ -23,7 +23,7 @@ export const authUser = asyncHandler(async (req, res) => {
       // token: token,
     });
   } else {
-    res.status(501);
+    res.status(401);
     throw new Error("Invalid email or password");
   }
 });
@@ -31,8 +31,7 @@ export const authUser = asyncHandler(async (req, res) => {
 // @route POST /api/users
 // @access public
 export const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, name, email, password, phone, address } =
-    req.body;
+  const { firstName, lastName, email, password, phone, address } = req.body;
   const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400);
@@ -70,6 +69,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 // @access private
 export const logoutUser = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", { httpOnly: true, expires: new Date(0) });
+  res.clearCookie("jwt");
   res.status(200).json({ message: "Loggged out" });
 });
 // @desc get user's profile
