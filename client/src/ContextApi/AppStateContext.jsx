@@ -8,7 +8,7 @@ export const ContextProvider = ({ children }) => {
   const [registerModal, setRegisterMoadal] = useState(false);
   const [adminSideBar, setAdminSideBar] = useState(true);
   const [loginModal, setLoginModal] = useState(false);
-  const [profile, setProfile] = useState(undefined);
+  const [profile, setProfile] = useState({});
   const [message, setMessage] = useState("info");
   const [severity, setSeverity] = useState("info");
   const [isError, setIsError] = useState(false);

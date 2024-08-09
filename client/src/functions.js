@@ -17,18 +17,16 @@ export const makePayment = (
   clientId,
   orderId,
   amount,
+  profile,
   callbackFunction,
   onCloseFunction
 ) => {
-  console.log(clientId);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
-
   let handler = window.PaystackPop.setup({
     key: clientId,
-    email: user.email,
+    email: profile.email,
     amount: amount * 100,
-    firstname: user.firstName,
-    lastname: user.lastName,
+    firstname: profile.firstName,
+    lastname: profile.lastName,
     ref: orderId,
     callback: callbackFunction,
     onClose: onCloseFunction,

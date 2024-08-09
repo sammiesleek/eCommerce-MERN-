@@ -115,7 +115,7 @@ const Register = () => {
               <input
                 className="border-b focus:outline-none focus:border-b-black w-full py-3 px-2 font-normal text-base"
                 placeholder="Email Address"
-                // type="email"
+                type="email"
                 value={formData.email}
                 name="email"
                 onChange={handleChange}

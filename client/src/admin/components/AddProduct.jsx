@@ -205,7 +205,7 @@ const AddProduct = ({ reload }) => {
               </p>
               <input
                 className="w-[70%] ml-auto py-3   rounded-md border-gray-500 border  focus:border-[#1FA076] focus:outline-transparent focus:ring-transparent placeholder:text-green-900"
-                type="number"
+                type="text"
                 placeholder="Product's Brand"
                 name="brand"
                 value={formData.brand}

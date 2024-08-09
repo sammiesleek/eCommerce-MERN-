@@ -61,7 +61,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="p-[130px]">
+    <div className="">
       <div className="flex flex-col h-[500px] w-[400px] max-w-[500px] bg-white m-auto py-4 px-6 relative z-10">
         <h4 className="text-center text-3xl font-semibold my-5">Login</h4>
         <form onSubmit={(e) => handleSubmit(e)}>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
 import { NairaFormatter } from "../utils/cartUtils";
 import { Editor } from "@icon-park/react";
@@ -9,15 +9,17 @@ import { useProfileMutation } from "../slices/usersApiSlice";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 import { setCredentials } from "../slices/authSlice";
+import { AppStateContext } from "../ContextApi/AppStateContext";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 3;
+  const perPage = 20;
   const indexOfLastData = currentPage * perPage;
-
+  const { profile } = useContext(AppStateContext);
   const indexOfFirstData = indexOfLastData - perPage;
-
+  const navigate = useNavigate();
   const paginate = (number) => {
     let page = orders.length / perPage;
     if (number > 0 && number <= page) {
@@ -32,21 +34,23 @@ const Profile = () => {
     useProfileMutation();
 
   const { data: orders, isLoading, error } = useGetMyOrdersQuery();
-  const { userInfo } = useSelector((state) => state.auth);
+  // const { userInfo } = useSelector((state) => state.auth);
+  const [formData, setFormData] = useState({});
+  console.log("profile");
+  useEffect(() => {
+    setFormData({
+      firstName: profile?.firstName,
+      lastName: profile?.lastName,
+      address: profile?.address,
+      phone: profile?.phone,
+      email: profile?.email,
+      _id: profile?._id,
+      passCheck: "",
+      newPass: "",
+      oldPass: "",
+    });
+  }, [profile]);
 
-  const data = {
-    firstName: userInfo.firstName,
-    lastName: userInfo.lastName,
-    address: userInfo.address,
-    phone: userInfo.phone,
-    email: userInfo.email,
-    _id: userInfo._id,
-    passCheck: "",
-    newPass: "",
-    oldPass: "",
-  };
-
-  const [formData, setFormData] = useState(data);
   const handleChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -84,7 +88,7 @@ const Profile = () => {
       }
     }
   };
-
+  if (profile == undefined) return <Loader />;
   return (
     <div className="flex flex-col max-w-7xl mx-auto  pt-20 gap-y-10">
       <div className="flex w-full h-full overflow-x-scroll pt-5">
@@ -92,6 +96,7 @@ const Profile = () => {
           <form
             onSubmit={handleSubmit}
             className="flex flex-wrap  w-full  gap-y-5 justify-between "
+            autoComplete="off"
           >
             <div className="flex w-full">
               <div className="flex items-center justify-center rounded-full  h-56 relative  mx-auto w-56">
@@ -262,7 +267,8 @@ const Profile = () => {
               .map((product, index) => (
                 <tr
                   key={index}
-                  className="bg-white  border-b   hover:bg-gray-50 "
+                  className="bg-white  border-b   hover:bg-gray-50 cursor-pointer "
+                  onClick={() => navigate(`/tracking/${product._id}`)}
                 >
                   <th
                     scope="row"

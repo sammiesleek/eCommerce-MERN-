@@ -9,7 +9,7 @@ const HomePage = () => {
   const { data: products, isLoading, error } = useGetProductsQuery();
 
   return (
-    <div className=" ">
+    <div className=" overflow-x-hidden">
       <Herosection />
       <SubHero />
       {isLoading ? (

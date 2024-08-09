@@ -1,5 +1,5 @@
 import { NairaFormatter } from "../utils/cartUtils";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makePayment, paystackScript } from "../functions";
 import {
@@ -10,6 +10,8 @@ import {
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import Profile from "./Profile";
+import { AppStateContext } from "../ContextApi/AppStateContext";
 
 const TrackOrder = () => {
   paystackScript();
@@ -20,6 +22,7 @@ const TrackOrder = () => {
   const [confirmPayment, { isLoading: confirming, error }] =
     useConfirmPaymentMutation();
 
+  const { profile } = useContext(AppStateContext);
   const { id: orderId } = useParams();
   const {
     data: order,
@@ -38,7 +41,6 @@ const TrackOrder = () => {
   const [paymentLoading, setPaymentLoading] = useState(false);
 
   const { shippingAddress } = useSelector((state) => state.cart);
-
   if (isLoading) {
     return (
       <div className="flex mt-40">
@@ -52,6 +54,7 @@ const TrackOrder = () => {
       clientId.clientId,
       orderId,
       order.totalPrice,
+      profile,
       function (response) {
         setPaymentLoading(true);
         var ref = response.reference;

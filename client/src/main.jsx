@@ -30,6 +30,8 @@ import Register from "./pages/Register.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import Profile from "./pages/Profile.jsx";
 import Validate from "./pages/Validate.jsx";
+import ErrorBoundary from "./components/ErrorMiddleWare.jsx";
+import Print from "./admin/pages/Print.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -49,6 +51,7 @@ const router = createBrowserRouter(
           <Route path="/tracking/:id" exact element={<TrackOrder />} />
         </Route>
       </Route>
+      <Route path="/ad" exact element={<Print />} />
       <Route path="/admin" element={<AdminRoute />}>
         <Route index exact element={<Dashboard />} />
         <Route path="/admin/orders" exact element={<Orders />} />
@@ -62,11 +65,11 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <ErrorBoundary>
     <Provider store={store}>
       <ContextProvider>
         <RouterProvider router={router} />
       </ContextProvider>
     </Provider>
-  </React.StrictMode>
+  </ErrorBoundary>
 );

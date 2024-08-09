@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../slices/cartSlice";
 import ProductQty from "../components/ProductQty";
 import { AppStateContext } from "../ContextApi/AppStateContext";
+import { NairaFormatter } from "../utils/cartUtils";
 
 const Product = () => {
   useEffect(() => {
@@ -27,7 +28,6 @@ const Product = () => {
     // setIsError,
   } = useContext(AppStateContext);
   const { id: productId } = useParams();
-
   const {
     data: product,
     isLoading,
@@ -55,8 +55,17 @@ const Product = () => {
                   size="20"
                   strokeWidth={3}
                 />
+                <Link className="text-black font-semibold" to="/products">
+                  Products
+                </Link>
+                <Right
+                  className="text-[#999]"
+                  theme="outline"
+                  size="20"
+                  strokeWidth={3}
+                />
               </span>
-              <p>product</p>
+              <p>{product?.name}</p>
             </span>
           </div>
 
@@ -69,21 +78,17 @@ const Product = () => {
               <div className="flex lg:w-full xl:w-[75%] flex-col mdlg:flex-row ">
                 <div className="flex w-full mdlg:w-1/2 flex-col">
                   <div className="flex">
-                    <img src={product.image} alt="" />
+                    <img src={JSON.parse(product.image)[0]} alt="" />
                   </div>
                   <div className="flex w-full justify-between mt-3 gap-x-5">
-                    <div className="flex w-[23%] justify-center items-center ">
-                      <img src="/images/bg3.jpg" alt="" />
-                    </div>
-                    <div className="flex w-[23%] justify-center items-center ">
-                      <img src="/images/bg3.jpg" alt="" />
-                    </div>
-                    <div className="flex w-[23%] justify-center items-center ">
-                      <img src="/images/bg3.jpg" alt="" />
-                    </div>
-                    <div className="flex w-[23%] justify-center items-center ">
-                      <img src="/images/bg9.jpg" alt="" />
-                    </div>
+                    {JSON.parse(product.image).map((image, index) => (
+                      <div
+                        key={index}
+                        className="flex w-[23%] justify-center items-center "
+                      >
+                        <img src="/images/bg3.jpg" alt="" />
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className="flex w-full mdlg:w-1/2 flex-col px-8">
@@ -91,7 +96,7 @@ const Product = () => {
                     <div className="flex flex-col border-b ">
                       <span className=" flex items-start justify-start">
                         <h4 className="text-3xl font-semibold">
-                          Contrast Weave Handheld Bucket Bag
+                          {product.name}
                         </h4>
                         <Like
                           className=" flex justify-self-start cursor-pointer text-black bg-transparent hover:bg-[#CEA384] hover:text-white transition-all ease-in-out rounded-full p-2 border ml-5 hover:border-transparent"
@@ -101,7 +106,7 @@ const Product = () => {
                         />
                       </span>
                       <p className="text-[#CEA384] text-2xl mt-2 font-semibold mb-0">
-                        {product.price}
+                        {NairaFormatter.format(product.price)}
                       </p>
                       <span className="flex  pb-4 mt-2 items-center">
                         <span className="flex items-center gap-x-2">
@@ -144,11 +149,7 @@ const Product = () => {
                     </div>
                     <div className="flex mt-5 flex-col">
                       <p className="text-[#4a4a4a] text-base">
-                        Step back in time with this cool shoulder-held bucket
-                        bag. It’s crafted from grained faux leather, with a boxy
-                        two-tone pattern of interwoven strips to the front. The
-                        zipped interior features a zipped compartment for
-                        safe-keeping; ...
+                        {product.description}
                       </p>
 
                       <span className="flex items-center mt-5">
@@ -206,7 +207,9 @@ const Product = () => {
                           <p className="text-black text-base mr-3">
                             Category:{" "}
                           </p>{" "}
-                          <p className="text-[#4a4a4a] text-base">Bags</p>
+                          <p className="text-[#4a4a4a] text-base">
+                            {product.category}
+                          </p>
                         </span>
                       </div>
                     </div>

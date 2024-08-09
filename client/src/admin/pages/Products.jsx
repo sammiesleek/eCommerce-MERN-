@@ -235,23 +235,23 @@ export const Products = () => {
             </div>
 
             <div className="flex justify-between w-full md:w-[49%] lg:w-[24%]">
-              <button
+              {/* <button
                 data-modal-target="deletemany-modal"
                 data-modal-toggle="deletemany-modal"
                 className="rounded-md py-3 flex w-[49%] justify-center items-center bg-[#e04949] text-white text-base font-semibold"
               >
                 Delete
-              </button>
+              </button> */}
               <button
                 onClick={() => setAddProduct(true)}
-                className="rounded-md py-3 flex w-[49%] justify-center items-center bg-[#1FA076] text-white text-base font-semibold"
+                className="rounded-md py-3 flex w-[49%] justify-center items-center bg-[#1FA076] text-white text-base font-semibold ml-auto"
               >
                 Add Product
               </button>
             </div>
           </div>
         </div>
-        <div className="p-3 bg-light-bgMid mb-5 items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4  pt-10 flex ">
+        {/* <div className="p-3 bg-light-bgMid mb-5 items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4  pt-10 flex ">
           <div className="flex flex-wrap w-full justify-between gap-y-4">
             <div className="flex w-full md:w-[49%] lg:w-[24%] bg-red-100 rounded-md ">
               <select className="bg-[#f2f4f6] block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg  focus:ring-transparent focus:border-[#1FA076]">
@@ -302,7 +302,7 @@ export const Products = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="relative flex flex-col overflow-x-auto   w-full  ">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 bg-light-bgMid rounded border">
             <thead className="text-xs rounded-lg text-gray-700 uppercase bg-[#F2F4F6]  ">
@@ -321,7 +321,7 @@ export const Products = () => {
                   </div>
                 </th> */}
                 <th scope="col" className="px-6 py-3">
-                  PRODUCT NAME
+                  PRODUCT
                 </th>
                 <th scope="col" className="px-6 py-3">
                   CATEGORY

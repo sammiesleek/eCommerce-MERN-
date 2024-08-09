@@ -483,10 +483,10 @@ export const Categories = () => {
               </form>
             </div>
 
-            <div className="flex justify-between w-full md:w-[49%] lg:w-[24%] ml-auto">
+            <div className="flex justify-between w-full md:w-[49%] lg:w-[24%] ">
               <button
                 onClick={() => setAddCategory(true)}
-                className="rounded-md py-3 flex w-[49%] justify-center items-center bg-[#1FA076] text-white text-base font-semibold"
+                className="rounded-md py-3 flex w-[49%] justify-center items-center bg-[#1FA076] text-white text-base font-semibold ml-auto"
               >
                 Add Category
               </button>

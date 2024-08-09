@@ -30,12 +30,10 @@ const SideBar = () => {
   //   setPath(window.location.pathname);
   //   console.log("first");
   // }, [window.location.pathname]);
-  console.log(path);
   const setUrl = (paths) => {
     if (!Array.isArray(paths)) {
       setPath(paths);
     }
-    console.log(path);
   };
   const content = [
     {

@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
       <div className="flex flex-col justify-center items-center product_card">
         <div className="flex relative">
           <Link to={`/products/${product._id}`}>
-            <img src={product.image} alt="" />
+            <img src={JSON.parse(product.image)[0]} alt="" />
           </Link>
           <span className="flex flex-col gap-y-4 absolute bottom-10  product_action ">
             <MallBag

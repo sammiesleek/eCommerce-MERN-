@@ -83,6 +83,12 @@ a{
 
 
 
+.rctp_gen{
+background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("/images/texture.jpg");
+
+ background-position: center;
+ background-size: contain;
+}
 
 .product_page, .proces_order{
   background-image: url("/images/probg.jpg");

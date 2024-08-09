@@ -49,7 +49,7 @@ router.get(
             isAdmin: req.user.isAdmin,
           };
 
-          res.status(200).json({ message: "valid user", user: userData });
+          res.status(200).json({ message: "success", user: userData });
         } catch (error) {
           res.status(401);
           res.cookie("jwt", "", { httpOnly: true, expires: new Date(0) });

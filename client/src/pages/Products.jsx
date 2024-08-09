@@ -121,7 +121,7 @@ const Products = () => {
           {products.map((product) => (
             <div
               key={product._id}
-              className="flex w-full md:w-[50%} lg:w-[33%] xl:w-[25%] p-2"
+              className="flex w-full md:w-[50%} lg:w-[33%] xl:w-[25%] p-2 h-[300px] bg-red-700"
             >
               <ProductCard product={product} />
             </div>

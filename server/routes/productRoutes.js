@@ -13,7 +13,7 @@ router.route("/").post(protect, adminProtect, createProduct);
 router.route("/").get(getProducts);
 router
   .route("/:id")
-  .get(protect, adminProtect, getProductById)
+  .get(getProductById)
   .put(protect, adminProtect, updateProduct)
   .delete(protect, adminProtect, deleteProduct);
 

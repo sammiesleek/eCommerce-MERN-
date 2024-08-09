@@ -60,7 +60,7 @@ const Header = () => {
         </div>
         <div className="hidden md:flex justify-self-center  mr-20">
           <Link to="/" className="font-bold text-xl">
-            Apparels
+            <span className="font-bold text-[#10B981] text-3xl">WizzBee</span>
           </Link>
         </div>
         <div
@@ -79,11 +79,15 @@ const Header = () => {
             className="md:hidden right-6 cursor-pointer absolute top-5 bg-white  rounded-full p-2"
           />
           <div className="flex flex-col md:flex-row bg-white   w-[300px]   md:w-fit md:bg-transparent h-full ">
-            <div className=" md:hidden flex justify-self-center py-8 w-full pl-3  border-b bg-gray-100">
-              <h1 className="font-bold text-3xl">Apparels</h1>
+            <div className=" md:hidden flex justify-self-center py-6 w-full pl-3  border-b bg-gray-100">
+              <Link to="/" className="font-bold text-xl">
+                <span className="font-bold text-[#10B981] text-3xl">
+                  WizzBee
+                </span>
+              </Link>
             </div>
             <div className="flex md:hidden  w-full border-b">
-              <span className="w-1/2 bg-black py-3 flex justify-center  items-center">
+              {/* <span className="w-1/2 bg-black py-3 flex justify-center  items-center">
                 <ApplicationMenu
                   theme="outline"
                   size="28"
@@ -91,11 +95,11 @@ const Header = () => {
                   strokeWidth={2}
                 />
                 <p className="text-white ml-2 mb-0">MENU</p>
-              </span>
-              <span className="w-1/2 py-3 bg-white flex justify-center profile_click  relative  items-center">
+              </span> */}
+              {/* <span className="w-1/2 py-3 bg-white flex justify-center profile_click  relative  items-center">
                 <span className="absolute top-3 right-0    flex-col py-4 px-3 w-[200px] profile_tab">
                   <span className="bg-white border flex flex-col pb-4 text-base  text-black gap-y-1">
-                    {profile && (
+                    {profile._id && (
                       <span
                         to="/login"
                         className="bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -103,7 +107,7 @@ const Header = () => {
                         welcome, {profile.firstName}
                       </span>
                     )}
-                    {!profile && (
+                    {!profile._id && (
                       <Link
                         to="/login"
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -111,7 +115,7 @@ const Header = () => {
                         Login
                       </Link>
                     )}
-                    {!profile && (
+                    {!profile._id && (
                       <Link
                         to="/register"
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -119,7 +123,7 @@ const Header = () => {
                         Register
                       </Link>
                     )}
-                    {profile && (
+                    {profile._id && (
                       <Link
                         to="/profile"
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -127,7 +131,7 @@ const Header = () => {
                         Profile
                       </Link>
                     )}
-                    {profile && profile.isAdmin && (
+                    {profile._id && profile.isAdmin && (
                       <Link
                         to="/admin"
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -135,7 +139,7 @@ const Header = () => {
                         Dashboard
                       </Link>
                     )}
-                    {profile && (
+                    {profile._id && (
                       <Link
                         onClick={handleLogout}
                         className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -151,10 +155,10 @@ const Header = () => {
                   size="24"
                   fill="#333"
                 />
-                {/* <p className="mb-0 ml-3 text-black">LOGIN</p> */}
-              </span>
+              
+              </span> */}
             </div>
-            <div className="flex flex-col md:flex-row  mt-5 md:mt-0 lg:mt-0 pl-3 gap-x-5">
+            <div className="flex flex-col md:flex-row   md:mt-0 lg:mt-0 pl-3 gap-x-5">
               <Link
                 onClick={() => {
                   setNavState(false);
@@ -205,18 +209,18 @@ const Header = () => {
               fill="#333"
             />
           </span>
-          <span className="hidden md:flex relative profile_click">
+          <span className="flex relative profile_click">
             <span className="absolute top-3 right-0    flex-col py-4 px-3 w-[200px] profile_tab">
-              <span className="bg-white border flex flex-col pb-4 text-base  text-black gap-y-1">
-                {profile && (
+              <span className="bg-white border flex flex-col pb-4 text-base  text-black gap-y-1 rounded-md">
+                {profile._id && (
                   <span
                     to="/login"
-                    className="bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
+                    className="bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer rounded-t-md"
                   >
                     welcome, {profile.firstName}
                   </span>
                 )}
-                {!profile && (
+                {!profile._id && (
                   <Link
                     to="/login"
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -224,7 +228,7 @@ const Header = () => {
                     Login
                   </Link>
                 )}
-                {!profile && (
+                {!profile._id && (
                   <Link
                     to="/register"
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -232,7 +236,7 @@ const Header = () => {
                     Register
                   </Link>
                 )}
-                {profile && (
+                {profile._id && (
                   <Link
                     to="/profile"
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -240,7 +244,7 @@ const Header = () => {
                     Profile
                   </Link>
                 )}
-                {profile && profile.isAdmin && (
+                {profile._id && profile.isAdmin && (
                   <Link
                     to="/admin"
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -248,7 +252,7 @@ const Header = () => {
                     Dashboard
                   </Link>
                 )}
-                {profile && (
+                {profile._id && (
                   <Link
                     onClick={handleLogout}
                     className="hover:bg-[#10B981] py-3 pl-3 hover:text-white cursor-pointer"
@@ -265,14 +269,14 @@ const Header = () => {
               fill="#333"
             />
           </span>
-          <span>
+          {/* <span>
             <Like
               className="flex cursor-pointer"
               theme="outline"
               size="24"
               fill="#333"
             />
-          </span>
+          </span> */}
           <span className=" relative ">
             {cartItems.length > 0 && (
               <span className="cart_count font-bold text-sm text-white">

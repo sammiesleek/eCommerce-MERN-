@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { NairaFormatter } from "../utils/cartUtils";
 import { clearCartItems, saveShippindAddress } from "../slices/cartSlice";
 import { useCreateOrderMutation } from "../slices/ordersApiSlice";
 import { toast } from "react-toastify";
+import { AppStateContext } from "../ContextApi/AppStateContext";
 
 const OrderSummary = () => {
   useEffect(() => {
@@ -12,8 +13,7 @@ const OrderSummary = () => {
   }, []);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userInfo } = useSelector((state) => state.auth);
-
+  const { profile } = useContext(AppStateContext);
   const {
     cartItems,
     itemsPrice,
@@ -31,11 +31,11 @@ const OrderSummary = () => {
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   const data = {
-    firstName: userInfo.firstName,
-    lastName: userInfo.lastName,
-    address: userInfo.address,
-    phone: userInfo.phone,
-    email: userInfo.email,
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    address: profile.address,
+    phone: profile.phone,
+    email: profile.email,
   };
   const [formData, setFormData] = useState(
     shippingAddress.address ? shippingAddress : data
@@ -89,7 +89,7 @@ const OrderSummary = () => {
                   className="border-b focus:outline-none bg-transparent py-3 focus:border-b-black w-full  px-2 font-normal text-base"
                   placeholder="Name"
                   type="text"
-                  value={userInfo.firstName + " " + userInfo.lastName}
+                  value={profile.firstName + " " + profile.lastName}
                   disabled
                 />
               </div>
@@ -98,7 +98,7 @@ const OrderSummary = () => {
                   className="border-b focus:outline-none bg-transparent py-3 focus:border-b-black w-full  px-2 font-normal text-base"
                   placeholder="Email Address"
                   type="email"
-                  value={userInfo.email}
+                  value={profile.email}
                   disabled
                 />
               </div>
